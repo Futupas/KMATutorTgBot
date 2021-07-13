@@ -10,6 +10,9 @@ namespace KMATutorBot.Models
         [BsonElement("telegramId")]
         public long Id { get; init; }
 
+        [BsonElement("menuSection")]
+        public int MenuSection { get; set; }
+
         [BsonElement("displayName")]
         public string DisplayName { get; init; }
 
@@ -33,7 +36,7 @@ namespace KMATutorBot.Models
 
         [BsonElement("licenseExpired")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-        public DateTime LicenseExpired { get; init; }
+        public DateTime? LicenseExpired { get; private set; } = null;
 
         /// <summary>
         /// True, if license is valid right now

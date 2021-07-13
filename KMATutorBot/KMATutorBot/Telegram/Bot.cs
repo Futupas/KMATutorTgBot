@@ -8,6 +8,7 @@ using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using KMATutorBot.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace KMATutorBot
 {
@@ -15,11 +16,14 @@ namespace KMATutorBot
     {
         private const string BOT_TOKEN = @"1822606315:AAGOAm6NN6ubNRm5rvjXDzxdaSb0z-kh8eA";
         private ITelegramBotClient botClient;
-        private Database DB;
+        private IDatabase DB;
+        protected IServiceProvider serviceProvider;
 
-        public Bot(Database DB)
+        public Bot(IServiceProvider serviceProvider)
         {
-            this.DB = DB;
+            this.serviceProvider = serviceProvider;
+            this.DB = serviceProvider.GetService<IDatabase>();
+
             botClient = new TelegramBotClient(BOT_TOKEN);
 
             var me = botClient.GetMeAsync().Result;
