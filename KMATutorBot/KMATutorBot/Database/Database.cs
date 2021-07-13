@@ -11,13 +11,38 @@ namespace KMATutorBot
     internal class Database
     {
         private const string CONNECTION_STRING = @"mongodb+srv://user1:user1user1@cluster0.di7oe.mongodb.net/test";
+        private MongoClient Client { get; set; }
+        private IMongoDatabase DB { get; set; }
+
+        #region Collections
+        private IMongoCollection<Models.BotUser> BotUsers;
+        #endregion
+
         public Database()
         {
-            MongoClient client = new MongoClient(CONNECTION_STRING);
-            //IMongoDatabase database = client.GetDatabase("MainDB");
-            var dbs = client.ListDatabases();
-            var a = dbs.ToList();
-            Console.WriteLine("d");
+            Client = new MongoClient(CONNECTION_STRING);
+            DB = Client.GetDatabase("MainDB");
+
+            BotUsers = DB.GetCollection<Models.BotUser>("BotUsers");
         }
+
+
+        #region DAL
+
+        public (Models.BotUser user, bool isNew) GetOrCreateUser(Models.BotUser source)
+        {
+            var user = BotUsers.Find(user => user.Id == source.Id).FirstOrDefault();
+            if (user == null)
+            {
+                BotUsers.InsertOne(source);
+                return (source, true);
+            }
+            else
+            {
+                return (user, false);
+            }
+        }
+
+        #endregion
     }
 }
