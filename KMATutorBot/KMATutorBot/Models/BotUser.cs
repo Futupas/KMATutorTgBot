@@ -11,7 +11,7 @@ namespace KMATutorBot.Models
         public long Id { get; init; }
 
         [BsonElement("menuSection")]
-        public int MenuSection { get; set; }
+        public int MenuSection { get; set; } = 0;
 
         [BsonElement("displayName")]
         public string DisplayName { get; init; }

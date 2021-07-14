@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KMATutorBot.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,9 +22,75 @@ namespace KMATutorBot.Menu
         public bool ForTeachers { get; init; } = true;
         public bool ForAdmins { get; init; } = false;
 
-        public string[]? GetSubMenus()
+        public MenuSection (bool isRoot = false)
         {
-            return Children.Select(el => el.Text).Concat(new[] { BACK_TEXT, BACK_TO_START_TEXT }).ToArray();
+            if (isRoot)
+            {
+                this.Parent = this;
+                this.Root = this;
+            }
+        }
+        public bool IsRoot
+        {
+            get
+            {
+                return this.Root == this;
+            }
+        }
+
+        public string[]? GetSubMenus(BotUser user)
+        {
+            return Children
+                .Where(el => el.ForAdmins == user.IsAdmin && el.ForStudents == (user.StudentCategories != null) && el.ForTeachers == (user.TeacherCategories != null))
+                .Select(el => el.Text)
+                .Concat(new[] { BACK_TEXT, BACK_TO_START_TEXT }).ToArray();
+            //todo don't show back text and backtoMenu text in some cases
+        }
+
+        public static (MenuSection root, List<MenuSection> allSections) GenerateDefaultMenu()
+        {
+            var allSections = new List<MenuSection>();
+            var root = new MenuSection(true)
+            {
+                Id = 0,
+                Children = new MenuSection[2],
+                ForAdmins = true,
+                ForStudents = true,
+                ForTeachers = true,
+                Text = "main menu",
+            };
+            allSections.Add(root);
+
+            var child1 = new MenuSection()
+            {
+                Id = 1,
+                Children = new MenuSection[0],
+                ForAdmins = true,
+                ForStudents = true,
+                ForTeachers = true,
+                Text = "child1",
+                Root = root,
+                Parent = root,
+            };
+            allSections.Add(child1);
+
+            var child2 = new MenuSection()
+            {
+                Id = 2,
+                Children = new MenuSection[0],
+                ForAdmins = true,
+                ForStudents = true,
+                ForTeachers = true,
+                Text = "child2",
+                Root = root,
+                Parent = root,
+            };
+            allSections.Add(child2);
+
+            root.Children[0] = child1;
+            root.Children[1] = child2;
+
+            return (root, allSections);
         }
     }
 }

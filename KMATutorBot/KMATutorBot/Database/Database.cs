@@ -19,7 +19,7 @@ namespace KMATutorBot
         private IMongoCollection<Models.BotUser> BotUsers;
         #endregion
 
-        public Database(IServiceProvider serviceProvider)
+        public Database()
         {
             Client = new MongoClient(IDatabase.CONNECTION_STRING);
             DB = Client.GetDatabase("MainDB");

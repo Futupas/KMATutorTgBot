@@ -16,13 +16,12 @@ namespace KMATutorBot
     {
         private const string BOT_TOKEN = @"1822606315:AAGOAm6NN6ubNRm5rvjXDzxdaSb0z-kh8eA";
         private ITelegramBotClient botClient;
-        private IDatabase DB;
-        protected IServiceProvider serviceProvider;
+        private Database DB;
+        private (Menu.MenuSection root, List<Menu.MenuSection> sections) Menu = KMATutorBot.Menu.MenuSection.GenerateDefaultMenu();
 
-        public Bot(IServiceProvider serviceProvider)
+        public Bot(Database DB)
         {
-            this.serviceProvider = serviceProvider;
-            this.DB = serviceProvider.GetService<IDatabase>();
+            this.DB = DB;
 
             botClient = new TelegramBotClient(BOT_TOKEN);
 
@@ -52,6 +51,8 @@ namespace KMATutorBot
                 };
                 var userTuple = DB.GetOrCreateUser(user);
                 user = userTuple.user;
+
+                var ctx = new Context(user, DB, this.Menu.sections);
 
                 await botClient.SendTextMessageAsync(
                   chatId: e.Message.Chat,
