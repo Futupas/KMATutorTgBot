@@ -15,12 +15,15 @@ namespace KMATutorBot.Menu
         public int Id { get; init; }
         public string Text { get; init; }
         public MenuSection[] Children { get; init; }
-        public MenuSection? Parent { get; init; }
+        public MenuSection Parent { get; init; }
         public MenuSection Root { get; init; }
 
         public bool ForStudents { get; init; } = true;
         public bool ForTeachers { get; init; } = true;
         public bool ForAdmins { get; init; } = false;
+
+        public bool HasLogic { get; init; } = false;
+        //todo add logic handler
 
         public MenuSection (bool isRoot = false)
         {
@@ -38,13 +41,23 @@ namespace KMATutorBot.Menu
             }
         }
 
-        public string[]? GetSubMenus(BotUser user)
+        public string[] GetSubMenus(BotUser user)
         {
             return Children
                 .Where(el => el.ForAdmins == user.IsAdmin && el.ForStudents == (user.StudentCategories != null) && el.ForTeachers == (user.TeacherCategories != null))
                 .Select(el => el.Text)
                 .Concat(new[] { BACK_TEXT, BACK_TO_START_TEXT }).ToArray();
             //todo don't show back text and backtoMenu text in some cases
+        }
+
+        public MenuSection NextMenuSection(BotUser user, string text)
+        {
+            //todo if has logic...
+            if (text == BACK_TEXT) return this.IsRoot ? this : this.Parent;
+            if (text == BACK_TO_START_TEXT) return this.IsRoot ? this : this.Root;
+            var children = Children
+                .Where(el => el.ForAdmins == user.IsAdmin && el.ForStudents == (user.StudentCategories != null) && el.ForTeachers == (user.TeacherCategories != null) && el.Text == text);
+            return children.Any() ? children.First() : null;
         }
 
         public static (MenuSection root, List<MenuSection> allSections) GenerateDefaultMenu()

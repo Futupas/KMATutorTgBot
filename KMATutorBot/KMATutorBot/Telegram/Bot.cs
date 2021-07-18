@@ -9,6 +9,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using KMATutorBot.Models;
 using Microsoft.Extensions.DependencyInjection;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace KMATutorBot
 {
@@ -51,14 +52,48 @@ namespace KMATutorBot
                 };
                 var userTuple = DB.GetOrCreateUser(user);
                 user = userTuple.user;
+                //todo handle exceptions
 
                 var ctx = new Context(user, DB, this.Menu.sections);
 
+                var handledResult = ctx.HandleText(e.Message.Text);
+
                 await botClient.SendTextMessageAsync(
-                  chatId: e.Message.Chat,
-                  text: $"You said:\n{e.Message.Text}\nYou are { (userTuple.isNew ? "" : "NOT ") }new user"
+                    chatId: e.Message.Chat,
+                    text: handledResult.message,
+                    replyMarkup: new ReplyKeyboardMarkup()
+                    {
+                        Keyboard = handledResult.menus.Select(menu => new KeyboardButton[] { new (menu) })
+                    }
                 );
             }
         }
     }
 }
+
+/*
+
+                                        //replyMarkup: new ReplyKeyboardMarkup()
+                                        //{
+                                        //    Keyboard = new KeyboardButton[][]
+                                        //    {
+                                        //        new KeyboardButton[]
+                                        //        {
+                                        //            new KeyboardButton("1-1"),
+                                        //            new KeyboardButton("1-2")
+                                        //        },
+
+                                        //        new KeyboardButton[]
+                                        //        {
+                                        //            new KeyboardButton("2")
+                                        //        },
+
+                                        //        new KeyboardButton[]
+                                        //        {
+                                        //            new KeyboardButton("3-1"),
+                                        //            new KeyboardButton("3-2"),
+                                        //            new KeyboardButton("3-3")
+                                        //        }
+                                        //    }
+                                        //} 
+ */
