@@ -14,7 +14,11 @@ namespace KMATutorBot.Models
         public int MenuSection { get; set; } = 0;
 
         [BsonElement("displayName")]
-        public string DisplayName { get; init; }
+        public string DisplayName { get; set; } //todo may be get; init...
+
+        /// <summary>About me information</summary>
+        [BsonElement("description")]
+        public string Description { get; set; }
 
         [BsonElement("telegramName")]
         public string TelegramName { get; init; } // I'm not sure, it is nesessary

@@ -50,6 +50,20 @@ namespace KMATutorBot
             user.MenuSection = newMenuSection.Id;
             return user;
         }
+        public Models.BotUser UpdateUserDisplayName(Models.BotUser user, string name)
+        {
+            if (user == null) return user;
+            BotUsers.UpdateOne(u => u.Id == user.Id, Builders<Models.BotUser>.Update.Set("displayName", name));
+            user.DisplayName = name;
+            return user;
+        }
+        public Models.BotUser UpdateUserDescription(Models.BotUser user, string description)
+        {
+            if (user == null) return user;
+            BotUsers.UpdateOne(u => u.Id == user.Id, Builders<Models.BotUser>.Update.Set("description", description));
+            user.Description = description;
+            return user;
+        }
 
         #endregion
     }

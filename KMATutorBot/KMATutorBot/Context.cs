@@ -34,25 +34,5 @@ namespace KMATutorBot
             return this.MenuSections.FirstOrDefault(el => el.Id == this.User.MenuSection);
             //todo check also permissions, throw error
         }
-
-        //public (string message, string[] menus) HandleText(string text)
-        //{
-        //    //todo this method needs to be expanded: we can also return different types of content etc
-        //    var currentMenu = GetCurrentMenuSection();
-        //    if (!currentMenu.HasLogic)
-        //    {
-        //        var submenu = currentMenu.NextMenuSection(User, text);
-        //        if (submenu == null)
-        //        {
-        //            return ($"Unknown button", currentMenu.GetSubMenus(User));
-        //        }
-        //        DB.UpdateUserMenuSection(User, submenu);
-        //        return ($"U are on menu section {submenu.Text}", submenu.GetSubMenus(User));
-        //    }
-        //    else
-        //    {
-        //        currentMenu.Handle(this);
-        //    }
-        //}
     }
 }
