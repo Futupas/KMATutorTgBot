@@ -5,14 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using KMATutorBot.Menu;
 using KMATutorBot.Models;
+using Telegram.Bot;
+using Telegram.Bot.Args;
 
 namespace KMATutorBot
 {
     internal class Context
     {
-        public BotUser User { get; init; }
+        public BotUser User { get; set; } // Actually it must be { get; init; }, but this is a lil kostyl
         public MenuSection Menu { get; init; }
         public Database DB { get; init; }
+        public MessageEventArgs MessageEvent { get; init; }
+        public ITelegramBotClient TelegramCLient { get; init; }
+
         public List<MenuSection> MenuSections { get; init; }
 
         public Context (BotUser user, Database dB, List<MenuSection> menuSections)
@@ -30,25 +35,24 @@ namespace KMATutorBot
             //todo check also permissions, throw error
         }
 
-        public (string message, string[] menus) HandleText(string text)
-        {
-            //todo this method needs to be expanded: we can also return different types of content etc
-            var currentMenu = GetCurrentMenuSection();
-            if (!currentMenu.HasLogic)
-            {
-                var submenu = currentMenu.NextMenuSection(User, text);
-                if (submenu == null)
-                {
-                    return ($"Unknown button", currentMenu.GetSubMenus(User));
-                }
-                DB.UpdateUserMenuSection(User, submenu);
-                return ($"U are on menu section {submenu.Text}", submenu.GetSubMenus(User));
-            }
-            else
-            {
-                return ($"Menu with logic", currentMenu.GetSubMenus(User));
-                //todo what to dowhen menu has logic...
-            }
-        }
+        //public (string message, string[] menus) HandleText(string text)
+        //{
+        //    //todo this method needs to be expanded: we can also return different types of content etc
+        //    var currentMenu = GetCurrentMenuSection();
+        //    if (!currentMenu.HasLogic)
+        //    {
+        //        var submenu = currentMenu.NextMenuSection(User, text);
+        //        if (submenu == null)
+        //        {
+        //            return ($"Unknown button", currentMenu.GetSubMenus(User));
+        //        }
+        //        DB.UpdateUserMenuSection(User, submenu);
+        //        return ($"U are on menu section {submenu.Text}", submenu.GetSubMenus(User));
+        //    }
+        //    else
+        //    {
+        //        currentMenu.Handle(this);
+        //    }
+        //}
     }
 }

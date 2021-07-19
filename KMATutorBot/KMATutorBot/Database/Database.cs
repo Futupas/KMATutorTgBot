@@ -45,6 +45,7 @@ namespace KMATutorBot
         }
         public Models.BotUser UpdateUserMenuSection(Models.BotUser user, MenuSection newMenuSection)
         {
+            if (user == null || newMenuSection == null) return user;
             BotUsers.UpdateOne(u => u.Id == user.Id, Builders<Models.BotUser>.Update.Set("menuSection", newMenuSection.Id));
             user.MenuSection = newMenuSection.Id;
             return user;

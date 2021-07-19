@@ -54,18 +54,23 @@ namespace KMATutorBot
                 user = userTuple.user;
                 //todo handle exceptions
 
-                var ctx = new Context(user, DB, this.Menu.sections);
+                var ctx = new Context(user, DB, this.Menu.sections) { 
+                    TelegramCLient = botClient,
+                    MessageEvent = e
+                };
 
-                var handledResult = ctx.HandleText(e.Message.Text);
+                await ctx.Menu.Handle(ctx);
 
-                await botClient.SendTextMessageAsync(
-                    chatId: e.Message.Chat,
-                    text: handledResult.message,
-                    replyMarkup: new ReplyKeyboardMarkup()
-                    {
-                        Keyboard = handledResult.menus.Select(menu => new KeyboardButton[] { new (menu) })
-                    }
-                );
+                //var handledResult = ctx.HandleText(e.Message.Text);
+
+                //await botClient.SendTextMessageAsync(
+                //    chatId: e.Message.Chat,
+                //    text: handledResult.message,
+                //    replyMarkup: new ReplyKeyboardMarkup()
+                //    {
+                //        Keyboard = handledResult.menus.Select(menu => new KeyboardButton[] { new (menu) })
+                //    }
+                //);
             }
         }
     }
