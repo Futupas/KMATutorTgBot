@@ -27,6 +27,16 @@ namespace KMATutorBot
             BotUsers = DB.GetCollection<Models.BotUser>("BotUsers");
         }
 
+        //public (
+        //    List<(int id, string name)> Students, 
+        //    List<(int id, string name)> Teachers
+        //    ) Categories = (
+        //        new() { (1, "Math"), (2, "Programming"), (3, "Philosophy") }, 
+        //        new() { (1, "Math"), (2, "Programming"), (3, "Philosophy") }
+        //    );
+        //public List<(int id, string name)> Categories =
+        //        new() { (1, "Math"), (2, "Programming"), (3, "Philosophy") };
+
 
         #region DAL
 
@@ -62,6 +72,23 @@ namespace KMATutorBot
             if (user == null) return user;
             BotUsers.UpdateOne(u => u.Id == user.Id, Builders<Models.BotUser>.Update.Set("description", description));
             user.Description = description;
+            return user;
+        }
+
+        /// <param name="categories">Can be null</param>
+        public Models.BotUser UpdateUserStudentCategories(Models.BotUser user, int[] categories)
+        {
+            if (user == null) return user;
+            BotUsers.UpdateOne(u => u.Id == user.Id, Builders<Models.BotUser>.Update.Set("studentCategories", categories));
+            user.StudentCategories = categories;
+            return user;
+        }
+        /// <param name="categories">Can be null</param>
+        public Models.BotUser UpdateUserTeacherCategories(Models.BotUser user, int[] categories)
+        {
+            if (user == null) return user;
+            BotUsers.UpdateOne(u => u.Id == user.Id, Builders<Models.BotUser>.Update.Set("teacherCategories", categories));
+            user.TeacherCategories = categories;
             return user;
         }
 

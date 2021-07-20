@@ -19,7 +19,7 @@ namespace KMATutorBot.Menu.Sections
         {
             var registrationMenuName = new MenuSection()
             {
-                Id = NextMenuSection,
+                Id = NextMenuSectionId(),
                 IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
                 Text = "Display name",
                 Handle = async (ctx) =>

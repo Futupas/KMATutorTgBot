@@ -24,10 +24,10 @@ namespace KMATutorBot.Models
         public string TelegramName { get; init; } // I'm not sure, it is nesessary
 
         [BsonElement("studentCategories")]
-        public int[] StudentCategories { get; init; } = null; // null if user isn't student
+        public int[] StudentCategories { get; set; } = null; // null if user isn't student
 
         [BsonElement("teacherCategories")]
-        public int[] TeacherCategories { get; init; } = null; // null if user isn't teacher
+        public int[] TeacherCategories { get; set; } = null; // null if user isn't teacher
 
         [BsonElement("isAdmin")]
         public bool IsAdmin { get; init; } = false;

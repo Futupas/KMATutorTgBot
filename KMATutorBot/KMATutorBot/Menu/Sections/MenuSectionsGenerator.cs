@@ -17,13 +17,10 @@ namespace KMATutorBot.Menu.Sections
     {
         private static MenuSection _Root;
         private static List<MenuSection> AllSections = new();
-        public static int _SectionMax { get; private set; } = 0;
-        public static int NextMenuSection
+        public static int _SectionMaxId { get; private set; } = 0;
+        public static int NextMenuSectionId()
         {
-            get
-            {
-                return _SectionMax++;
-            }
+            return _SectionMaxId++;
         }
         
         /// <summary>
@@ -46,7 +43,7 @@ namespace KMATutorBot.Menu.Sections
         {
             var root = new MenuSection(true)
             {
-                Id = NextMenuSection,
+                Id = NextMenuSectionId(),
                 IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
                 Text = "main menu",
             };

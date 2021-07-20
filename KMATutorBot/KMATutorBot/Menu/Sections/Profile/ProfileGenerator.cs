@@ -12,7 +12,7 @@ namespace KMATutorBot.Menu.Sections
         {
             var registrationMenu = new MenuSection()
             {
-                Id = NextMenuSection,
+                Id = NextMenuSectionId(),
                 IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
                 Text = "My profile",
             };

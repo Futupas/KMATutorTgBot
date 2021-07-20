@@ -9,8 +9,13 @@ namespace KMATutorBot
 {
     internal class Application
     {
+        //todo remove this huge kostyl
+        public static Dictionary<int, string> Categories =
+                new() { { 1, "Math" }, { 2, "Programming" }, { 3, "Philosophy" } };
+
         public Database DB { get; private set; }
         public Bot TelegramBot { get; private set; }
+        public (List<(int id, string name)> Students, List<(int id, string name)> Teachers) Categiries = (new(), new());
 
         public Application()
         {

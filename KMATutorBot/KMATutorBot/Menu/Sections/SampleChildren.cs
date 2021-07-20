@@ -12,14 +12,14 @@ namespace KMATutorBot.Menu.Sections
         {
             var child1 = new MenuSection()
             {
-                Id = NextMenuSection,
+                Id = NextMenuSection(),
                 IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
                 Text = "child1",
             };
 
             var child2 = new MenuSection()
             {
-                Id = NextMenuSection,
+                Id = NextMenuSection(),
                 IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
                 Text = "child2",
             };
