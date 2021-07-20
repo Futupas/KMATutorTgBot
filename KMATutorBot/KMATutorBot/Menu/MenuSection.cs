@@ -30,6 +30,9 @@ namespace KMATutorBot.Menu
         public static readonly Func<BotUser, bool> FORUSER_SAMPLE_ADMINS_ONLY = (BotUser user) => user.IsAdmin;
         public static readonly Func<BotUser, bool> FORUSER_SAMPLE_ALL_USERS = (BotUser user) => true;
 
+        /// <summary>Needs back and backToMenu</summary>
+        public Func<Context, KeyboardButton[][]> CustomKeyboard { get; set; } = null;
+
         public bool HasLogic { get; init; } = false;
         public Func<Context, Task<bool>> Handle = DEFAULT_MENU_HANDLER;
         public static async Task<bool> DEFAULT_MENU_HANDLER (Context context) 
@@ -38,6 +41,7 @@ namespace KMATutorBot.Menu
             var text = context.MessageEvent.Message.Text;
             var returningText = "default text";
             string[] returningMenus = default;
+            KeyboardButton[][] keyboard = default;
 
             var submenu = currentMenu.NextMenuSection(context.User, text);
 
@@ -47,11 +51,18 @@ namespace KMATutorBot.Menu
             {
                 returningText = $"Unknown button";
                 returningMenus = currentMenu.GetSubMenus(context.User);
+                keyboard = currentMenu.CustomKeyboard == null ? 
+                    returningMenus.Select(menu => new KeyboardButton[] { new(menu) }).ToArray() :
+                    currentMenu.CustomKeyboard(context);
             }
             else
             {
                 returningText = $"U are on menu section {submenu.Text}";
                 returningMenus = submenu.GetSubMenus(context.User);
+                keyboard = submenu.CustomKeyboard == null ?
+                    returningMenus.Select(menu => new KeyboardButton[] { new(menu) }).ToArray() :
+                    submenu.CustomKeyboard(context);
+                //keyboard = submenu.CustomKeyboard(context) ?? returningMenus.Select(menu => new KeyboardButton[] { new(menu) }).ToArray();
             }
 
             await context.TelegramCLient.SendTextMessageAsync(
@@ -59,7 +70,7 @@ namespace KMATutorBot.Menu
                 text: returningText,
                 replyMarkup: new ReplyKeyboardMarkup()
                 {
-                    Keyboard = returningMenus.Select(menu => new KeyboardButton[] { new(menu) })
+                    Keyboard = keyboard
                 }
             );
             return true;

@@ -26,7 +26,7 @@ namespace KMATutorBot.Menu.Sections
                 {
                     var sign = (user.StudentCategories != null && user.StudentCategories.Contains(cat.Key)) ?
                         REMOVE_CATEGORY_TEXT : ADD_CATEGORY_TEXT;
-                    return sign + cat;
+                    return sign + cat.Value;
                 })
                 .Concat(new[] { IM_NOT_A_STUDENT_TEXT })
                 .Concat(new string[] { MenuSection.BACK_TEXT, MenuSection.BACK_TO_START_TEXT })
@@ -41,6 +41,7 @@ namespace KMATutorBot.Menu.Sections
                 Id = NextMenuSectionId(),
                 IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
                 Text = "Modify student categories",
+                CustomKeyboard = (ctx) => GenerateCategoriesReplyMarkup(ctx.User),
                 Handle = async (ctx) =>
                 {
                     var text = ctx.MessageEvent.Message.Text;
@@ -90,7 +91,7 @@ namespace KMATutorBot.Menu.Sections
                         if (Application.Categories.ContainsValue(category))
                         {
                             var catId = Application.Categories.FirstOrDefault(kvp => kvp.Value == category).Key;
-                            var newCategories = ctx.User.StudentCategories
+                            var newCategories = (ctx.User.StudentCategories ?? Array.Empty<int>())
                                 .Where(c => c != catId)
                                 .Concat(new[] { catId })
                                 .ToArray();
@@ -123,7 +124,7 @@ namespace KMATutorBot.Menu.Sections
                         if (Application.Categories.ContainsValue(category))
                         {
                             var catId = Application.Categories.FirstOrDefault(kvp => kvp.Value == category).Key;
-                            var newCategories = ctx.User.StudentCategories
+                            var newCategories = (ctx.User.StudentCategories ?? Array.Empty<int>())
                                 .Where(c => c != catId)
                                 .ToArray();
                             ctx.User = ctx.DB.UpdateUserStudentCategories(ctx.User, newCategories);
