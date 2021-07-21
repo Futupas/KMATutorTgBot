@@ -75,30 +75,3 @@ namespace KMATutorBot
         }
     }
 }
-
-/*
-
-                                        //replyMarkup: new ReplyKeyboardMarkup()
-                                        //{
-                                        //    Keyboard = new KeyboardButton[][]
-                                        //    {
-                                        //        new KeyboardButton[]
-                                        //        {
-                                        //            new KeyboardButton("1-1"),
-                                        //            new KeyboardButton("1-2")
-                                        //        },
-
-                                        //        new KeyboardButton[]
-                                        //        {
-                                        //            new KeyboardButton("2")
-                                        //        },
-
-                                        //        new KeyboardButton[]
-                                        //        {
-                                        //            new KeyboardButton("3-1"),
-                                        //            new KeyboardButton("3-2"),
-                                        //            new KeyboardButton("3-3")
-                                        //        }
-                                        //    }
-                                        //} 
- */

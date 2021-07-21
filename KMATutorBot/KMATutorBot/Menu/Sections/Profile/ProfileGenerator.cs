@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KMATutorBot.MessageTexts;
 
 namespace KMATutorBot.Menu.Sections
 {
@@ -14,7 +15,7 @@ namespace KMATutorBot.Menu.Sections
             {
                 Id = NextMenuSectionId(),
                 IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
-                Text = "My profile",
+                Text = BotMessages.MY_PROFILE_MENU_TEXT,
             };
             AddMenuSection(_Root, registrationMenu);
 

@@ -10,15 +10,16 @@ using Telegram.Bot.Types.Enums;
 using KMATutorBot.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Telegram.Bot.Types.ReplyMarkups;
+using KMATutorBot.MessageTexts;
 
 namespace KMATutorBot.Menu.Sections
 {
     internal static partial class MenuSectionsGenerator
     {
-        private const string IM_NOT_A_STUDENT_TEXT = "I'm not a student";
-        private const string IM_NOT_A_TEACHER_TEXT = "I'm not a teacher";
-        private const string ADD_CATEGORY_TEXT = "+ ";
-        private const string REMOVE_CATEGORY_TEXT = "- ";
+        private const string IM_NOT_A_STUDENT_TEXT = BotMessages.MY_PROFILE_IM_NOT_A_STUDENT_TEXT;
+        private const string IM_NOT_A_TEACHER_TEXT = BotMessages.MY_PROFILE_IM_NOT_A_TEACHER_TEXT;
+        private const string ADD_CATEGORY_TEXT = BotMessages.ADD_CATEGORY_TEXT;
+        private const string REMOVE_CATEGORY_TEXT = BotMessages.REMOVE_CATEGORY_TEXT;
 
         private static KeyboardButton[][] GenerateStudentCategoriesReplyMarkup(BotUser user)
         {
@@ -57,7 +58,7 @@ namespace KMATutorBot.Menu.Sections
             {
                 Id = NextMenuSectionId(),
                 IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
-                Text = "Modify student categories",
+                Text = BotMessages.MY_PROFILE_MODIFY_STUDENT_CATEGORIES_TEXT,
                 CustomKeyboard = (ctx) => GenerateStudentCategoriesReplyMarkup(ctx.User),
                 Handle = async (ctx) =>
                 {
@@ -66,7 +67,7 @@ namespace KMATutorBot.Menu.Sections
                     {
                         await ctx.TelegramCLient.SendTextMessageAsync(
                             chatId: ctx.MessageEvent.Message.Chat,
-                            text: $"You should use one of proposed categories",
+                            text: BotMessages.MY_PROFILE_USE_ONE_OF_THE_PROPOSED_CATEGORIES,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
                                 Keyboard = GenerateStudentCategoriesReplyMarkup(ctx.User)
@@ -94,7 +95,7 @@ namespace KMATutorBot.Menu.Sections
                         ctx.DB.UpdateUserStudentCategories(ctx.User, null);
                         await ctx.TelegramCLient.SendTextMessageAsync(
                             chatId: ctx.MessageEvent.Message.Chat,
-                            text: $"You are not a student anymore",
+                            text: BotMessages.MY_PROFILE_YOU_ARE_NOT_A_STUDENT_ANYMORE,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
                                 Keyboard = GenerateStudentCategoriesReplyMarkup(ctx.User)
@@ -115,7 +116,7 @@ namespace KMATutorBot.Menu.Sections
                             ctx.User = ctx.DB.UpdateUserStudentCategories(ctx.User, newCategories);
                             await ctx.TelegramCLient.SendTextMessageAsync(
                                 chatId: ctx.MessageEvent.Message.Chat,
-                                text: $"U successfully added student category {category}",
+                                text: BotMessages.MY_PROFILE_STUDENT_ADDED_CATEGORY(category),
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
                                     Keyboard = GenerateStudentCategoriesReplyMarkup(ctx.User)
@@ -126,7 +127,7 @@ namespace KMATutorBot.Menu.Sections
                         {
                             await ctx.TelegramCLient.SendTextMessageAsync(
                                 chatId: ctx.MessageEvent.Message.Chat,
-                                text: $"Use one of proposed categories",
+                                text: BotMessages.MY_PROFILE_USE_ONE_OF_THE_PROPOSED_CATEGORIES,
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
                                     Keyboard = GenerateStudentCategoriesReplyMarkup(ctx.User)
@@ -147,7 +148,7 @@ namespace KMATutorBot.Menu.Sections
                             ctx.User = ctx.DB.UpdateUserStudentCategories(ctx.User, newCategories);
                             await ctx.TelegramCLient.SendTextMessageAsync(
                                 chatId: ctx.MessageEvent.Message.Chat,
-                                text: $"U successfully removed student category {category}",
+                                text: BotMessages.MY_PROFILE_STUDENT_ADDED_CATEGORY(category),
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
                                     Keyboard = GenerateStudentCategoriesReplyMarkup(ctx.User)
@@ -158,7 +159,7 @@ namespace KMATutorBot.Menu.Sections
                         {
                             await ctx.TelegramCLient.SendTextMessageAsync(
                                 chatId: ctx.MessageEvent.Message.Chat,
-                                text: $"Use one of proposed categories",
+                                text: BotMessages.MY_PROFILE_USE_ONE_OF_THE_PROPOSED_CATEGORIES,
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
                                     Keyboard = GenerateStudentCategoriesReplyMarkup(ctx.User)
@@ -170,7 +171,7 @@ namespace KMATutorBot.Menu.Sections
                     {
                         await ctx.TelegramCLient.SendTextMessageAsync(
                             chatId: ctx.MessageEvent.Message.Chat,
-                            text: $"Use one of proposed categories",
+                            text: BotMessages.MY_PROFILE_USE_ONE_OF_THE_PROPOSED_CATEGORIES,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
                                 Keyboard = GenerateStudentCategoriesReplyMarkup(ctx.User)
@@ -190,7 +191,7 @@ namespace KMATutorBot.Menu.Sections
             {
                 Id = NextMenuSectionId(),
                 IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
-                Text = "Modify teacher categories",
+                Text = BotMessages.MY_PROFILE_MODIFY_TEACHER_CATEGORIES_TEXT,
                 CustomKeyboard = (ctx) => GenerateTeacherCategoriesReplyMarkup(ctx.User),
                 Handle = async (ctx) =>
                 {
@@ -199,7 +200,7 @@ namespace KMATutorBot.Menu.Sections
                     {
                         await ctx.TelegramCLient.SendTextMessageAsync(
                             chatId: ctx.MessageEvent.Message.Chat,
-                            text: $"You should use one of proposed categories",
+                            text: BotMessages.MY_PROFILE_USE_ONE_OF_THE_PROPOSED_CATEGORIES,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
                                 Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
@@ -227,7 +228,7 @@ namespace KMATutorBot.Menu.Sections
                         ctx.DB.UpdateUserTeacherCategories(ctx.User, null);
                         await ctx.TelegramCLient.SendTextMessageAsync(
                             chatId: ctx.MessageEvent.Message.Chat,
-                            text: $"You are not a teacher anymore",
+                            text: BotMessages.MY_PROFILE_YOU_ARE_NOT_A_TEACHER_ANYMORE,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
                                 Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
@@ -248,7 +249,7 @@ namespace KMATutorBot.Menu.Sections
                             ctx.User = ctx.DB.UpdateUserTeacherCategories(ctx.User, newCategories);
                             await ctx.TelegramCLient.SendTextMessageAsync(
                                 chatId: ctx.MessageEvent.Message.Chat,
-                                text: $"U successfully added teacher category {category}",
+                                text: BotMessages.MY_PROFILE_TEACHER_ADDED_CATEGORY(category),
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
                                     Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
@@ -259,7 +260,7 @@ namespace KMATutorBot.Menu.Sections
                         {
                             await ctx.TelegramCLient.SendTextMessageAsync(
                                 chatId: ctx.MessageEvent.Message.Chat,
-                                text: $"Use one of proposed categories",
+                                text: BotMessages.MY_PROFILE_USE_ONE_OF_THE_PROPOSED_CATEGORIES,
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
                                     Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
@@ -280,7 +281,7 @@ namespace KMATutorBot.Menu.Sections
                             ctx.User = ctx.DB.UpdateUserTeacherCategories(ctx.User, newCategories);
                             await ctx.TelegramCLient.SendTextMessageAsync(
                                 chatId: ctx.MessageEvent.Message.Chat,
-                                text: $"U successfully removed teacher category {category}",
+                                text: BotMessages.MY_PROFILE_TEACHER_REMOVED_CATEGORY(category),
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
                                     Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
@@ -291,7 +292,7 @@ namespace KMATutorBot.Menu.Sections
                         {
                             await ctx.TelegramCLient.SendTextMessageAsync(
                                 chatId: ctx.MessageEvent.Message.Chat,
-                                text: $"Use one of proposed categories",
+                                text: BotMessages.MY_PROFILE_USE_ONE_OF_THE_PROPOSED_CATEGORIES,
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
                                     Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
@@ -303,7 +304,7 @@ namespace KMATutorBot.Menu.Sections
                     {
                         await ctx.TelegramCLient.SendTextMessageAsync(
                             chatId: ctx.MessageEvent.Message.Chat,
-                            text: $"Use one of proposed categories",
+                            text: BotMessages.MY_PROFILE_USE_ONE_OF_THE_PROPOSED_CATEGORIES,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
                                 Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)

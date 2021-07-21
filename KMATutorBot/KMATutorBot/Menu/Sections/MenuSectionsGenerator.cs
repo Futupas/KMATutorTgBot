@@ -10,6 +10,7 @@ using Telegram.Bot.Types.Enums;
 using KMATutorBot.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Telegram.Bot.Types.ReplyMarkups;
+using KMATutorBot.MessageTexts;
 
 namespace KMATutorBot.Menu.Sections
 {
@@ -45,7 +46,7 @@ namespace KMATutorBot.Menu.Sections
             {
                 Id = NextMenuSectionId(),
                 IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
-                Text = "main menu",
+                Text = BotMessages.ROOT_MENU_TEXT
             };
             _Root = root;
             AllSections.Add(root);

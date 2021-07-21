@@ -10,6 +10,7 @@ using Telegram.Bot.Types.Enums;
 using KMATutorBot.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Telegram.Bot.Types.ReplyMarkups;
+using KMATutorBot.MessageTexts;
 
 namespace KMATutorBot.Menu.Sections
 {
@@ -22,7 +23,7 @@ namespace KMATutorBot.Menu.Sections
             {
                 Id = NextMenuSectionId(),
                 IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
-                Text = "About me",
+                Text = BotMessages.MY_PROFILE_DESCRIPTION_MENU_TEXT,
                 Handle = async (ctx) =>
                 {
                     var text = ctx.MessageEvent.Message.Text;
@@ -30,7 +31,7 @@ namespace KMATutorBot.Menu.Sections
                     {
                         await ctx.TelegramCLient.SendTextMessageAsync(
                             chatId: ctx.MessageEvent.Message.Chat,
-                            text: $"Enter not empty about me text",
+                            text: BotMessages.MY_PROFILE_ENTER_NOT_EMPTY_DESCRIPTION,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
                                 Keyboard = new KeyboardButton[][] { new KeyboardButton[] { new(MenuSection.BACK_TEXT) }, new KeyboardButton[] { new(MenuSection.BACK_TO_START_TEXT) } }
@@ -59,7 +60,7 @@ namespace KMATutorBot.Menu.Sections
 
                     await ctx.TelegramCLient.SendTextMessageAsync(
                         chatId: ctx.MessageEvent.Message.Chat,
-                        text: $"Update user {ctx.MessageEvent.Message.Chat.Id} with about me text {ctx.MessageEvent.Message.Text}",
+                        text: BotMessages.MY_PROFILE_DESCRIPTION_UPDATED(ctx),
                         replyMarkup: new ReplyKeyboardMarkup()
                         {
                             Keyboard = parentMenu.GetSubMenus(ctx.User).Select(menu => new KeyboardButton[] { new(menu) })

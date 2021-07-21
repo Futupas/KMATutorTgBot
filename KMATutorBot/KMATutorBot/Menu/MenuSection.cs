@@ -10,13 +10,14 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using Telegram.Bot.Types.ReplyMarkups;
+using KMATutorBot.MessageTexts;
 
 namespace KMATutorBot.Menu
 {
     internal class MenuSection
     {
-        public const string BACK_TEXT = @"Back";
-        public const string BACK_TO_START_TEXT = @"Back To Menu";
+        public const string BACK_TEXT = BotMessages.BACK_TEXT;
+        public const string BACK_TO_START_TEXT = BotMessages.BACK_TO_ROOT_TEXT;
 
         public int Id { get; init; }
         public string Text { get; init; }
@@ -39,7 +40,7 @@ namespace KMATutorBot.Menu
         {
             var currentMenu = context.Menu;
             var text = context.MessageEvent.Message.Text;
-            var returningText = "default text";
+            var returningText = "";
             string[] returningMenus = default;
             KeyboardButton[][] keyboard = default;
 
@@ -49,7 +50,7 @@ namespace KMATutorBot.Menu
 
             if (submenu == null)
             {
-                returningText = $"Unknown button";
+                returningText = BotMessages.UNKNOWN_COMMAND;
                 returningMenus = currentMenu.GetSubMenus(context.User);
                 keyboard = currentMenu.CustomKeyboard == null ? 
                     returningMenus.Select(menu => new KeyboardButton[] { new(menu) }).ToArray() :
@@ -57,7 +58,7 @@ namespace KMATutorBot.Menu
             }
             else
             {
-                returningText = $"U are on menu section {submenu.Text}";
+                returningText = BotMessages.YOU_ARE_ON_MENU_SECTION(submenu.Text);
                 returningMenus = submenu.GetSubMenus(context.User);
                 keyboard = submenu.CustomKeyboard == null ?
                     returningMenus.Select(menu => new KeyboardButton[] { new(menu) }).ToArray() :
