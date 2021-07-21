@@ -41,37 +41,24 @@ namespace KMATutorBot
         }
         private async void Bot_OnMessage(object sender, MessageEventArgs e)
         {
-            if (e.Message.Text != null)
+            Console.WriteLine($"Received a text message in chat {e.Message.Chat.Id}.");
+
+            var user = new BotUser()
             {
-                Console.WriteLine($"Received a text message in chat {e.Message.Chat.Id}.");
+                Id = e.Message.From.Id,
+                TelegramName = e.Message.From.FirstName + " " + e.Message.From.LastName,
+            };
+            var userTuple = DB.GetOrCreateUser(user);
+            user = userTuple.user;
+            //todo handle exceptions
 
-                var user = new BotUser()
-                {
-                    Id = e.Message.From.Id,
-                    TelegramName = e.Message.From.FirstName + " " + e.Message.From.LastName,
-                };
-                var userTuple = DB.GetOrCreateUser(user);
-                user = userTuple.user;
-                //todo handle exceptions
+            var ctx = new Context(user, DB, this.Menu.sections)
+            {
+                TelegramCLient = botClient,
+                MessageEvent = e
+            };
 
-                var ctx = new Context(user, DB, this.Menu.sections) { 
-                    TelegramCLient = botClient,
-                    MessageEvent = e
-                };
-
-                await ctx.Menu.Handle(ctx);
-
-                //var handledResult = ctx.HandleText(e.Message.Text);
-
-                //await botClient.SendTextMessageAsync(
-                //    chatId: e.Message.Chat,
-                //    text: handledResult.message,
-                //    replyMarkup: new ReplyKeyboardMarkup()
-                //    {
-                //        Keyboard = handledResult.menus.Select(menu => new KeyboardButton[] { new (menu) })
-                //    }
-                //);
-            }
+            await ctx.Menu.Handle(ctx);
         }
     }
 }

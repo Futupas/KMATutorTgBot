@@ -44,7 +44,7 @@ namespace KMATutorBot.Menu.Sections
                         ctx.User = ctx.DB.UpdateUserMenuSection(ctx.User, newMenu);
                         await ctx.TelegramCLient.SendTextMessageAsync(
                             chatId: ctx.MessageEvent.Message.Chat,
-                            text: text,
+                            text: newMenu.Text,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
                                 Keyboard = newMenu.GetSubMenus(ctx.User).Select(menu => new KeyboardButton[] { new(menu) })
