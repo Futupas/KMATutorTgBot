@@ -21,11 +21,7 @@ namespace KMATutorBot.Menu.Sections
             GenerateNameProfileEditor(registrationMenu);
             GenerateDescriptionProfileEditor(registrationMenu);
             GenerateStudentCategoriesProfileEditor(registrationMenu);
-
-            // name
-            // description
-            // students
-            // teachers
+            GenerateTeacherCategoriesProfileEditor(registrationMenu);
         }
     }
 }
