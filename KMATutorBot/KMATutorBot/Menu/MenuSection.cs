@@ -40,9 +40,6 @@ namespace KMATutorBot.Menu
         {
             var currentMenu = context.Menu;
             var text = context.MessageEvent.Message.Text;
-            var returningText = "";
-            string[] returningMenus = default;
-            KeyboardButton[][] keyboard = default;
 
             var submenu = currentMenu.NextMenuSection(context.User, text);
 
@@ -50,30 +47,30 @@ namespace KMATutorBot.Menu
 
             if (submenu == null)
             {
-                returningText = BotMessages.UNKNOWN_COMMAND;
-                returningMenus = currentMenu.GetSubMenus(context.User);
-                keyboard = currentMenu.CustomKeyboard == null ? 
-                    returningMenus.Select(menu => new KeyboardButton[] { new(menu) }).ToArray() :
-                    currentMenu.CustomKeyboard(context);
+                await context.TelegramCLient.SendTextMessageAsync(
+                    chatId: context.MessageEvent.Message.Chat,
+                    text: BotMessages.UNKNOWN_COMMAND,
+                    replyMarkup: new ReplyKeyboardMarkup()
+                    {
+                        Keyboard = currentMenu.CustomKeyboard == null ?
+                            currentMenu.GetSubMenus(context.User).Select(menu => new KeyboardButton[] { new(menu) }).ToArray() :
+                            currentMenu.CustomKeyboard(context)
+                    }
+                );
             }
             else
             {
-                returningText = BotMessages.YOU_ARE_ON_MENU_SECTION(submenu.Text);
-                returningMenus = submenu.GetSubMenus(context.User);
-                keyboard = submenu.CustomKeyboard == null ?
-                    returningMenus.Select(menu => new KeyboardButton[] { new(menu) }).ToArray() :
-                    submenu.CustomKeyboard(context);
-                //keyboard = submenu.CustomKeyboard(context) ?? returningMenus.Select(menu => new KeyboardButton[] { new(menu) }).ToArray();
+                await context.TelegramCLient.SendTextMessageAsync(
+                    chatId: context.MessageEvent.Message.Chat,
+                    text: BotMessages.YOU_ARE_ON_MENU_SECTION(submenu.Text),
+                    replyMarkup: new ReplyKeyboardMarkup()
+                    {
+                        Keyboard = submenu.CustomKeyboard == null ?
+                            submenu.GetSubMenus(context.User).Select(menu => new KeyboardButton[] { new(menu) }).ToArray() :
+                            submenu.CustomKeyboard(context)
+                    }
+                );
             }
-
-            await context.TelegramCLient.SendTextMessageAsync(
-                chatId: context.MessageEvent.Message.Chat,
-                text: returningText,
-                replyMarkup: new ReplyKeyboardMarkup()
-                {
-                    Keyboard = keyboard
-                }
-            );
             return true;
         }
 
