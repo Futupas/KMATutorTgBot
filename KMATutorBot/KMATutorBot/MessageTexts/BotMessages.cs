@@ -11,7 +11,7 @@ namespace KMATutorBot.MessageTexts
         public const string BACK_TEXT = @"Back";
         public const string BACK_TO_ROOT_TEXT = @"Back to root";
         public const string UNKNOWN_COMMAND = @"Unknown command(";
-        public static string YOU_ARE_ON_MENU_SECTION (string menuSection) => $"U are on menu section {menuSection}";
+        public static string YOU_ARE_ON_MENU_SECTION(string menuSection) => $"U are on menu section {menuSection}";
         public const string ROOT_MENU_TEXT = @"Root menu";
         public const string MY_PROFILE_MENU_TEXT = @"My profile";
         public const string MY_PROFILE_DISPLAY_NAME_MENU_TEXT = @"Display name";
@@ -39,6 +39,27 @@ namespace KMATutorBot.MessageTexts
             $"U successfully added student category {category}";
         public static string MY_PROFILE_TEACHER_REMOVED_CATEGORY(string category) =>
             $"U successfully removed student category {category}";
+
+        public const string FINDER_FIND_STUDENTS_MENU_TEXT = @"Find students";
+        public const string FINDER_SEARCH_AGAIN_TEXT = @"Search again";
+        public const string FINDER_NO_STUDENTS_TEXT = @"We couldn't find any students 4 u";
+        public static string FINDER_WE_FOUND_STUDENTS_TEXT (Models.BotUser teacher, IEnumerable<Models.BotUser> students)
+        {
+            if (students == null || !students.Any()) return FINDER_NO_STUDENTS_TEXT;
+            //todo add link to profile
+            var body = students
+                .Select(st => {
+                    var bodyNamePart = $"{st.DisplayName ?? "Unnamed student"}\n";
+                    var bodyDescriptionPart = st.Description == null ? "" : $"{st.Description}\n";
+                    var intersectedCategories = teacher.TeacherCategories
+                        .Intersect(st.StudentCategories)
+                        .Select(catId => Application.Categories.TryGetValue(catId, out string catName) ? catName : null)
+                        .Where(catName => !string.IsNullOrEmpty(catName));
+                    var bodyIntersectionsPart = $"You have these categories intersections: {string.Join(", ", intersectedCategories)}";
+                    return bodyNamePart + bodyDescriptionPart + bodyIntersectionsPart;
+                });
+            return $"Ookey, for u we found these students (limit 10):\n\n" + string.Join("\n\n", body);
+        }
 
     }
 

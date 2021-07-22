@@ -33,6 +33,9 @@ namespace KMATutorBot.Menu.Sections
         {
             foreach (var child in children)
             {
+                if (child.Text == null)
+                    throw new Exception("MenuSection.Text mustn't be null!");
+
                 AllSections.Add(child);
                 parent.Children.Add(child);
                 child.Root = _Root;
@@ -55,10 +58,24 @@ namespace KMATutorBot.Menu.Sections
         public static (MenuSection root, List<MenuSection> allSections) GenerateDefaultMenu()
         {
             GenerateRoot();
-            GenerateSampleChildren();
             GenerateProfile();
+            GenerateFinder();
 
             return (_Root, AllSections);
+        }
+
+
+        private static KeyboardButton[][] GenerateKeyboard(params string[] buttons)
+        {
+            if (buttons == null) return null;
+
+            // todo maybe add trim
+            var result = buttons
+                .Where(btn => !string.IsNullOrEmpty(btn))
+                .Distinct()
+                .Select(btn => new KeyboardButton[] { new(btn) })
+                .ToArray();
+            return result;
         }
     }
 }

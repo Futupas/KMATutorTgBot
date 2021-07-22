@@ -34,6 +34,8 @@ namespace KMATutorBot.Menu
         /// <summary>Needs back and backToMenu</summary>
         public Func<Context, KeyboardButton[][]> CustomKeyboard { get; set; } = null;
 
+        public Func<Context, Task<bool>> OnOpen { get; init; } = null;
+
         public bool HasLogic { get; init; } = false;
         public Func<Context, Task<bool>> Handle = DEFAULT_MENU_HANDLER;
         public static async Task<bool> DEFAULT_MENU_HANDLER (Context context) 
@@ -60,16 +62,25 @@ namespace KMATutorBot.Menu
             }
             else
             {
-                await context.TelegramCLient.SendTextMessageAsync(
-                    chatId: context.MessageEvent.Message.Chat,
-                    text: BotMessages.YOU_ARE_ON_MENU_SECTION(submenu.Text),
-                    replyMarkup: new ReplyKeyboardMarkup()
-                    {
-                        Keyboard = submenu.CustomKeyboard == null ?
-                            submenu.GetSubMenus(context.User).Select(menu => new KeyboardButton[] { new(menu) }).ToArray() :
-                            submenu.CustomKeyboard(context)
-                    }
-                );
+                if (submenu.OnOpen == null)
+                {
+                    await context.TelegramCLient.SendTextMessageAsync(
+                        chatId: context.MessageEvent.Message.Chat,
+                        text: BotMessages.YOU_ARE_ON_MENU_SECTION(submenu.Text),
+                        replyMarkup: new ReplyKeyboardMarkup()
+                        {
+                            Keyboard = submenu.CustomKeyboard == null ?
+                                submenu.GetSubMenus(context.User).Select(menu => new KeyboardButton[] { new(menu) }).ToArray() :
+                                submenu.CustomKeyboard(context)
+                        }
+                    );
+                }
+                else
+                {
+                    await submenu.OnOpen(context);
+                    //todo handle false result
+                }
+                
             }
             return true;
         }

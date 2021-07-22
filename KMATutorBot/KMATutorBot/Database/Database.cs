@@ -92,6 +92,32 @@ namespace KMATutorBot
             return user;
         }
 
+        public IEnumerable<Models.BotUser> GetAllFreeStudents(int[] categories, int? limit = 10)
+        {
+            if (categories == null || !categories.Any()) return Array.Empty<Models.BotUser>();
+
+            var filterBuilder = Builders<Models.BotUser>.Filter.Where(user => user.StudentCategories != null);
+            filterBuilder &= Builders<Models.BotUser>.Filter.AnyIn(user => user.StudentCategories, categories);
+
+            var students = BotUsers
+                .Find(filterBuilder)
+                .Limit(limit)
+                .ToEnumerable();
+
+            return students;
+        }
+        public IEnumerable<Models.BotUser> GetAllFreeTeachers(int[] categories, int? limit = 10)
+        {
+            if (categories == null || !categories.Any()) return Array.Empty<Models.BotUser>();
+
+            var teachers = BotUsers
+                .Find(user => user.TeacherCategories != null && user.TeacherCategories.Intersect(categories).Any())
+                .Limit(limit)
+                .ToEnumerable();
+
+            return teachers;
+        }
+
         #endregion
     }
 }
