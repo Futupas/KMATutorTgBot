@@ -70,7 +70,7 @@ namespace KMATutorBot
                     text: BotMessages.HELLO_MESSAGE(ctx),
                     replyMarkup: new ReplyKeyboardMarkup()
                     {
-                        Keyboard = KMATutorBot.Menu.Sections.MenuSectionsGenerator.GenerateKeyboardWithBacks(ctx, ctx.Menu.GetSubMenus(ctx.User))
+                        Keyboard = KMATutorBot.Menu.Sections.MenuSectionsGenerator.GenerateKeyboardWithBacks(ctx.Menu.Root, ctx.Menu.GetSubMenus(ctx.User))
                     },
                     parseMode: ParseMode.Html
                 );

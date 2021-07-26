@@ -23,7 +23,7 @@ namespace KMATutorBot.Menu.Sections
                 Id = NextMenuSectionId(),
                 IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
                 Text = BotMessages.FINDER_FIND_TEACHERS_MENU_TEXT,
-                CustomKeyboard = (ctx) => GenerateKeyboardWithBacks(ctx, Application.Categories.Select(cat => cat.Name)),
+                CustomKeyboard = (ctx) => GenerateKeyboardWithBacks(ctx.Menu, Application.Categories.Select(cat => cat.Name)),
                 OnOpen = async (ctx) =>
                 {
                     var categories = Application.Categories.Select(cat => cat.Name);
@@ -33,7 +33,7 @@ namespace KMATutorBot.Menu.Sections
                         text: BotMessages.FINDER_FIND_TEACHERS_SELECT_CATEGORY_TEXT,
                         replyMarkup: new ReplyKeyboardMarkup()
                         {
-                            Keyboard = GenerateKeyboard(categories, new[] { MenuSection.BACK_TO_START_TEXT })
+                            Keyboard = GenerateKeyboardWithBacks(ctx.Menu, categories)
                         },
                         parseMode: ParseMode.Html
                     );
@@ -59,7 +59,7 @@ namespace KMATutorBot.Menu.Sections
                             text: replyText,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
-                                Keyboard = GenerateKeyboard(Application.Categories.Select(cat => cat.Name), new[] { MenuSection.BACK_TO_START_TEXT })
+                                Keyboard = GenerateKeyboardWithBacks(ctx.Menu, Application.Categories.Select(cat => cat.Name))
                             },
                             parseMode: ParseMode.Html
                         );
@@ -71,7 +71,7 @@ namespace KMATutorBot.Menu.Sections
                             text: BotMessages.MY_PROFILE_TEACHER_INCORRECT_CATEGORY_TEXT,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
-                                Keyboard = GenerateKeyboard(Application.Categories.Select(cat => cat.Name), new[] { MenuSection.BACK_TO_START_TEXT })
+                                Keyboard = GenerateKeyboardWithBacks(ctx.Menu, Application.Categories.Select(cat => cat.Name))
                             },
                             parseMode: ParseMode.Html
                         );

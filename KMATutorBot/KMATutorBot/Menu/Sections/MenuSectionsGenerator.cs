@@ -66,40 +66,40 @@ namespace KMATutorBot.Menu.Sections
         }
 
 
-        public static KeyboardButton[][] GenerateKeyboard(params string[] buttons)
-        {
-            if (buttons == null) return null;
+        //public static KeyboardButton[][] GenerateKeyboard(params string[] buttons)
+        //{
+        //    if (buttons == null) return null;
 
-            // todo maybe add trim
-            var result = buttons
-                .Where(btn => !string.IsNullOrEmpty(btn))
-                .Distinct()
-                .Select(btn => new KeyboardButton[] { new(btn) })
-                .ToArray();
-            return result;
-        }
-        public static KeyboardButton[][] GenerateKeyboard(params IEnumerable<string>[] buttons)
-        {
-            if (buttons == null) return null;
+        //    // todo maybe add trim
+        //    var result = buttons
+        //        .Where(btn => !string.IsNullOrEmpty(btn))
+        //        .Distinct()
+        //        .Select(btn => new KeyboardButton[] { new(btn) })
+        //        .ToArray();
+        //    return result;
+        //}
+        //public static KeyboardButton[][] GenerateKeyboard(params IEnumerable<string>[] buttons)
+        //{
+        //    if (buttons == null) return null;
 
-            //var buttons1Dimensional = buttons.Aggregate((accumulator, element) => accumulator.Concat(element));
+        //    //var buttons1Dimensional = buttons.Aggregate((accumulator, element) => accumulator.Concat(element));
 
-            var buttons1Dimensional = (buttons as IEnumerable<IEnumerable<string>>)
-                .Aggregate((accumulator, element) => accumulator.Concat(element));
+        //    var buttons1Dimensional = (buttons as IEnumerable<IEnumerable<string>>)
+        //        .Aggregate((accumulator, element) => accumulator.Concat(element));
 
-            // todo maybe add trim
-            var result = buttons1Dimensional
-                .Where(btn => !string.IsNullOrEmpty(btn))
-                .Distinct()
-                .Select(btn => new KeyboardButton[] { new(btn) })
-                .ToArray();
-            return result;
-        }
-        public static KeyboardButton[][] GenerateKeyboardWithBacks(Context? ctx, params string[] buttons)
+        //    // todo maybe add trim
+        //    var result = buttons1Dimensional
+        //        .Where(btn => !string.IsNullOrEmpty(btn))
+        //        .Distinct()
+        //        .Select(btn => new KeyboardButton[] { new(btn) })
+        //        .ToArray();
+        //    return result;
+        //}
+        public static KeyboardButton[][] GenerateKeyboardWithBacks(MenuSection newSection, params string[] buttons)
         {
             if (buttons == null) buttons = Array.Empty<string>();
 
-            if (ctx == null)
+            if (newSection == null)
             {
                 return buttons
                     .Where(btn => !string.IsNullOrEmpty(btn))
@@ -111,7 +111,7 @@ namespace KMATutorBot.Menu.Sections
                     .ToArray();
             }
 
-            if (ctx.Menu.IsRoot)
+            if (newSection.IsRoot)
             {
                 return buttons
                     .Where(btn => !string.IsNullOrEmpty(btn))
@@ -119,7 +119,7 @@ namespace KMATutorBot.Menu.Sections
                     .Select(btn => new KeyboardButton[] { new(btn) })
                     .ToArray();
             }
-            else if (ctx.Menu.Parent != null && ctx.Menu.Parent.IsRoot)
+            else if (newSection.Parent != null && newSection.Parent.IsRoot)
             {
                 return buttons
                     .Where(btn => !string.IsNullOrEmpty(btn))
@@ -142,11 +142,11 @@ namespace KMATutorBot.Menu.Sections
                     .ToArray();
             }
         }
-        public static KeyboardButton[][] GenerateKeyboardWithBacks(Context ctx, IEnumerable<string> buttons)
+        public static KeyboardButton[][] GenerateKeyboardWithBacks(MenuSection newSection, IEnumerable<string> buttons)
         {
             if (buttons == null) buttons = Array.Empty<string>();
 
-            if (ctx == null)
+            if (newSection == null)
             {
                 return buttons
                     .Where(btn => !string.IsNullOrEmpty(btn))
@@ -158,7 +158,7 @@ namespace KMATutorBot.Menu.Sections
                     .ToArray();
             }
 
-            if (ctx.Menu.IsRoot)
+            if (newSection.IsRoot)
             {
                 return buttons
                     .Where(btn => !string.IsNullOrEmpty(btn))
@@ -166,14 +166,15 @@ namespace KMATutorBot.Menu.Sections
                     .Select(btn => new KeyboardButton[] { new(btn) })
                     .ToArray();
             }
-            else if (ctx.Menu.Parent != null && ctx.Menu.Parent.IsRoot)
+            else if (newSection.Parent != null && newSection.Parent.IsRoot)
             {
                 return buttons
                     .Where(btn => !string.IsNullOrEmpty(btn))
                     .Distinct()
                     .Select(btn => new KeyboardButton[] { new(btn) })
                     .Concat(new KeyboardButton[][] {
-                        new KeyboardButton[] { new(MenuSection.BACK_TO_START_TEXT) }
+                        new KeyboardButton[] { new(MenuSection.BACK_TEXT) }
+                        //new KeyboardButton[] { new(MenuSection.BACK_TO_START_TEXT) }
                     })
                     .ToArray();
             }

@@ -59,7 +59,7 @@ namespace KMATutorBot.Menu
                     replyMarkup: new ReplyKeyboardMarkup()
                     {
                         Keyboard = currentMenu.CustomKeyboard == null ?
-                            currentMenu.GetSubMenus(context.User).Select(menu => new KeyboardButton[] { new(menu) }).ToArray() :
+                            MenuSectionsGenerator.GenerateKeyboardWithBacks(context.Menu, currentMenu.GetSubMenus(context.User)) :
                             currentMenu.CustomKeyboard(context)
                     },
                     parseMode: ParseMode.Html
@@ -75,7 +75,7 @@ namespace KMATutorBot.Menu
                         replyMarkup: new ReplyKeyboardMarkup()
                         {
                             Keyboard = submenu.CustomKeyboard == null ?
-                                submenu.GetSubMenus(context.User).Select(menu => new KeyboardButton[] { new(menu) }).ToArray() :
+                                MenuSectionsGenerator.GenerateKeyboardWithBacks(submenu, submenu.GetSubMenus(context.User)) :
                                 submenu.CustomKeyboard(context)
                         },
                         parseMode: ParseMode.Html
@@ -101,8 +101,8 @@ namespace KMATutorBot.Menu
                     replyMarkup: new ReplyKeyboardMarkup()
                     {
                         Keyboard = keyboardButtons ??
-                            (context.Menu.CustomKeyboard == null ? null : context.Menu.CustomKeyboard(context)) ??
-                            MenuSectionsGenerator.GenerateKeyboardWithBacks(context, Enumerable.Empty<string>())
+                            (context.Menu.CustomKeyboard == null ? MenuSectionsGenerator.GenerateKeyboardWithBacks(context.Menu, null) : context.Menu.CustomKeyboard(context))
+                            
                     },
                     parseMode: ParseMode.Html
                 );
@@ -117,7 +117,7 @@ namespace KMATutorBot.Menu
                     text: newMenu.Text,
                     replyMarkup: new ReplyKeyboardMarkup()
                     {
-                        Keyboard = newMenu.GetSubMenus(context.User).Select(menu => new KeyboardButton[] { new(menu) })
+                        Keyboard = MenuSectionsGenerator.GenerateKeyboardWithBacks(newMenu, newMenu.GetSubMenus(context.User))
                     },
                     parseMode: ParseMode.Html
                 );
@@ -134,8 +134,8 @@ namespace KMATutorBot.Menu
                 replyMarkup: new ReplyKeyboardMarkup()
                 {
                     Keyboard = keyboardButtons ??
-                        (context.Menu.CustomKeyboard == null ? null : context.Menu.CustomKeyboard(context)) ??
-                        MenuSectionsGenerator.GenerateKeyboardWithBacks(context, Enumerable.Empty<string>())
+                        (context.Menu.CustomKeyboard == null ? MenuSectionsGenerator.GenerateKeyboardWithBacks(context.Menu, null) : context.Menu.CustomKeyboard(context))
+                        
                 },
                 parseMode: ParseMode.Html
             );
@@ -159,25 +159,9 @@ namespace KMATutorBot.Menu
 
         public string[] GetSubMenus(BotUser user)
         {
-            if (this.IsRoot)
-            {
-                return Children
-                .Where(el => el.IsForUser(user))
-                .Select(el => el.Text)
-                .ToArray();
-            }
-            else if (this.Parent != null && this.Parent.IsRoot)
-            {
-                return Children
-                    .Where(el => el.IsForUser(user))
-                    .Select(el => el.Text)
-                    .Concat(new[] { BACK_TO_START_TEXT })
-                    .ToArray();
-            }
             return Children
                 .Where(el => el.IsForUser(user))
                 .Select(el => el.Text)
-                .Concat(new[] { BACK_TEXT, BACK_TO_START_TEXT })
                 .ToArray();
         }
 
@@ -192,7 +176,7 @@ namespace KMATutorBot.Menu
 
         public static (MenuSection root, List<MenuSection> allSections) GenerateDefaultMenu()
         {
-            return Sections.MenuSectionsGenerator.GenerateDefaultMenu();
+            return MenuSectionsGenerator.GenerateDefaultMenu();
         }
     }
 }

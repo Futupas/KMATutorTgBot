@@ -51,7 +51,7 @@ namespace KMATutorBot.Menu.Sections
                                 text: BotMessages.ADMIN_PANEL_LICENSES_USER_WITH_THIS_NICK_NOT_EXISTS,
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
-                                    Keyboard = GenerateKeyboardWithBacks(ctx, null)
+                                    Keyboard = GenerateKeyboardWithBacks(ctx.Menu, null)
                                 },
                                 parseMode: ParseMode.Html
                             );
@@ -65,7 +65,7 @@ namespace KMATutorBot.Menu.Sections
                                 text: BotMessages.ADMIN_PANEL_LICENSES_SET_USER_LICENSE(ctx, user),
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
-                                    Keyboard = GenerateKeyboardWithBacks(ctx,
+                                    Keyboard = GenerateKeyboardWithBacks(ctx.Menu,
                                         BotMessages.ADMIN_PANEL_LICENSES_DEFAULT_PLAN_1_MINUTE,
                                         BotMessages.ADMIN_PANEL_LICENSES_DEFAULT_PLAN_1_DAY,
                                         BotMessages.ADMIN_PANEL_LICENSES_DEFAULT_PLAN_1_WEEK,
@@ -103,7 +103,7 @@ namespace KMATutorBot.Menu.Sections
                                 text: BotMessages.ADMIN_PANEL_LICENSES_UPDATED_SUCCESSFULLY(ctx, user, time),
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
-                                    Keyboard = GenerateKeyboardWithBacks(ctx, parentMenu.GetSubMenus(ctx.User))
+                                    Keyboard = GenerateKeyboardWithBacks(parentMenu, parentMenu.GetSubMenus(ctx.User))
                                 },
                                 parseMode: ParseMode.Html
                             );

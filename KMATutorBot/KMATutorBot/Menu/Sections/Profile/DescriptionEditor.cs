@@ -43,7 +43,7 @@ namespace KMATutorBot.Menu.Sections
                         text: BotMessages.MY_PROFILE_DESCRIPTION_UPDATED(ctx),
                         replyMarkup: new ReplyKeyboardMarkup()
                         {
-                            Keyboard = parentMenu.GetSubMenus(ctx.User).Select(menu => new KeyboardButton[] { new(menu) })
+                            Keyboard = GenerateKeyboardWithBacks(parentMenu, parentMenu.GetSubMenus(ctx.User))
                         },
                         parseMode: ParseMode.Html
                     );
