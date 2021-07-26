@@ -103,11 +103,26 @@ namespace KMATutorBot.Menu
 
         public string[] GetSubMenus(BotUser user)
         {
+            if (this.IsRoot)
+            {
+                return Children
+                .Where(el => el.IsForUser(user))
+                .Select(el => el.Text)
+                .ToArray();
+            }
+            else if (this.Parent != null && this.Parent.IsRoot)
+            {
+                return Children
+                    .Where(el => el.IsForUser(user))
+                    .Select(el => el.Text)
+                    .Concat(new[] { BACK_TO_START_TEXT })
+                    .ToArray();
+            }
             return Children
                 .Where(el => el.IsForUser(user))
                 .Select(el => el.Text)
-                .Concat(new[] { BACK_TEXT, BACK_TO_START_TEXT }).ToArray();
-            //todo don't show back text and backtoMenu text in some cases
+                .Concat(new[] { BACK_TEXT, BACK_TO_START_TEXT })
+                .ToArray();
         }
 
         public MenuSection NextMenuSection(BotUser user, string text)

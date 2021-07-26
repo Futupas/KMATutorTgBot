@@ -12,11 +12,11 @@ namespace KMATutorBot
     {
         //todo remove this huge kostyl
         public static List<Category> Categories =
-                new() { new(1, "Math"), new(2, "Programming"), new(3, "Philosophy") };
+                new() { new("Math"), new("Programming"), new("Philosophy") };
 
         public Database DB { get; private set; }
         public Bot TelegramBot { get; private set; }
-        public (List<(int id, string name)> Students, List<(int id, string name)> Teachers) Categiries = (new(), new());
+        //public (List<(int id, string name)> Students, List<(int id, string name)> Teachers) Categiries = (new(), new());
 
         public Application()
         {

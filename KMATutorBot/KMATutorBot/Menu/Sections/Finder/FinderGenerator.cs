@@ -31,7 +31,7 @@ namespace KMATutorBot.Menu.Sections
                         text: BotMessages.FINDER_FIND_TEACHERS_SELECT_CATEGORY_TEXT,
                         replyMarkup: new ReplyKeyboardMarkup()
                         {
-                            Keyboard = GenerateKeyboard(categories, new[] { MenuSection.BACK_TEXT, MenuSection.BACK_TO_START_TEXT })
+                            Keyboard = GenerateKeyboard(categories, new[] { MenuSection.BACK_TO_START_TEXT })
                         }
                     );
                     return true;
@@ -46,12 +46,12 @@ namespace KMATutorBot.Menu.Sections
                             text: BotMessages.UNKNOWN_COMMAND,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
-                                Keyboard = GenerateKeyboard(Application.Categories.Select(cat => cat.Name), new[] { MenuSection.BACK_TEXT, MenuSection.BACK_TO_START_TEXT })
+                                Keyboard = GenerateKeyboard(Application.Categories.Select(cat => cat.Name), new[] { MenuSection.BACK_TO_START_TEXT })
                             }
                         );
                         return true;
                     }
-                    if (text == MenuSection.BACK_TEXT || text == MenuSection.BACK_TO_START_TEXT)
+                    if (text == MenuSection.BACK_TO_START_TEXT)
                     {
                         var newMenu = ctx.Menu.NextMenuSection(ctx.User, text);
                         ctx.User = ctx.DB.UpdateUserMenuSection(ctx.User, newMenu);
@@ -79,7 +79,7 @@ namespace KMATutorBot.Menu.Sections
                             text: replyText,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
-                                Keyboard = GenerateKeyboard(Application.Categories.Select(cat => cat.Name), new[] { MenuSection.BACK_TEXT, MenuSection.BACK_TO_START_TEXT })
+                                Keyboard = GenerateKeyboard(Application.Categories.Select(cat => cat.Name), new[] { MenuSection.BACK_TO_START_TEXT })
                             }
                         );
                     }
@@ -90,7 +90,7 @@ namespace KMATutorBot.Menu.Sections
                             text: BotMessages.MY_PROFILE_TEACHER_INCORRECT_CATEGORY_TEXT,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
-                                Keyboard = GenerateKeyboard(Application.Categories.Select(cat => cat.Name), new[] { MenuSection.BACK_TEXT, MenuSection.BACK_TO_START_TEXT })
+                                Keyboard = GenerateKeyboard(Application.Categories.Select(cat => cat.Name), new[] { MenuSection.BACK_TO_START_TEXT })
                             }
                         );
                     }

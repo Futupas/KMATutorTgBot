@@ -11,12 +11,12 @@ namespace KMATutorBot.Models
     /// </summary>
     public class Category: IEquatable<Category>, IComparable<Category>
     {
-        private static int _currentId;
+        private static int _currentId = 1;
         public int Id { get; init; }
         public string Name { get; init; }
-        public Category(int id, string name)
+        public Category(string name)
         {
-            this.Id = id;
+            this.Id = _currentId++;
             this.Name = name;
         }
 
