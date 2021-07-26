@@ -50,6 +50,7 @@ namespace KMATutorBot.Menu
             var submenu = currentMenu.NextMenuSection(context.User, text);
 
             context.User = context.DB.UpdateUserMenuSection(context.User, submenu);
+            context.Menu = submenu;
 
             if (submenu == null)
             {

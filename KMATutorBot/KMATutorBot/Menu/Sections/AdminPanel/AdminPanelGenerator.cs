@@ -79,10 +79,6 @@ namespace KMATutorBot.Menu.Sections
                     }
                     else
                     {
-                        var nickname = (string)data; // Can be exception
-                        if (await MenuSection.HandleEmptyOrBackString(text, ctx, null)) return true;
-                        var user = ctx.DB.GetUserByTelegramNickname(nickname);
-
                         void RemoveDataFromUser()
                         {
                             var newData = ctx.User.Data;
@@ -93,7 +89,16 @@ namespace KMATutorBot.Menu.Sections
                             }
                             ctx.DB.UpdateUserData(ctx.User);
                         }
-                        async void SendOkMsgAndReturn(DateTime? time)
+
+                        var nickname = (string)data; // Can be exception
+                        if (await MenuSection.HandleEmptyOrBackString(text, ctx, null))
+                        {
+                            RemoveDataFromUser();
+                            return true;
+                        }
+                        var user = ctx.DB.GetUserByTelegramNickname(nickname);
+
+                        async Task SendOkMsgAndReturn(DateTime? time)
                         {
                             var parentMenu = ctx.Menu.Parent;
                             ctx.DB.UpdateUserMenuSection(ctx.User, parentMenu);
@@ -109,13 +114,14 @@ namespace KMATutorBot.Menu.Sections
                             );
                         }
 
+
                         if (text == BotMessages.ADMIN_PANEL_LICENSES_DEFAULT_PLAN_1_MINUTE)
                         {
                             var newTime = DateTime.Now + new TimeSpan(0, 1, 0);
                             user.LicenseExpired = newTime;
                             ctx.DB.UpdateUserLicenseExpired(user);
                             RemoveDataFromUser();
-                            SendOkMsgAndReturn(newTime);
+                            await SendOkMsgAndReturn(newTime);
                             return true;
                         }
                         else if (text == BotMessages.ADMIN_PANEL_LICENSES_DEFAULT_PLAN_1_DAY)
@@ -124,7 +130,7 @@ namespace KMATutorBot.Menu.Sections
                             user.LicenseExpired = newTime;
                             ctx.DB.UpdateUserLicenseExpired(user);
                             RemoveDataFromUser();
-                            SendOkMsgAndReturn(newTime);
+                            await SendOkMsgAndReturn(newTime);
                             return true;
                         }
                         else if (text == BotMessages.ADMIN_PANEL_LICENSES_DEFAULT_PLAN_1_WEEK)
@@ -133,7 +139,7 @@ namespace KMATutorBot.Menu.Sections
                             user.LicenseExpired = newTime;
                             ctx.DB.UpdateUserLicenseExpired(user);
                             RemoveDataFromUser();
-                            SendOkMsgAndReturn(newTime);
+                            await SendOkMsgAndReturn(newTime);
                             return true;
                         }
                         else if (text == BotMessages.ADMIN_PANEL_LICENSES_DEFAULT_PLAN_10000_DAYS)
@@ -142,7 +148,7 @@ namespace KMATutorBot.Menu.Sections
                             user.LicenseExpired = newTime;
                             ctx.DB.UpdateUserLicenseExpired(user);
                             RemoveDataFromUser();
-                            SendOkMsgAndReturn(newTime);
+                            await SendOkMsgAndReturn(newTime);
                             return true;
                         }
                         else if (text == BotMessages.ADMIN_PANEL_LICENSES_DEFAULT_PLAN_REMOVE_LICENSE)
@@ -150,7 +156,7 @@ namespace KMATutorBot.Menu.Sections
                             user.LicenseExpired = null;
                             ctx.DB.UpdateUserLicenseExpired(user);
                             RemoveDataFromUser();
-                            SendOkMsgAndReturn(null);
+                            await SendOkMsgAndReturn(null);
                             return true;
                         }
                         else if (uint.TryParse(text, out var days))
@@ -158,7 +164,7 @@ namespace KMATutorBot.Menu.Sections
                             var newTime = DateTime.Now + new TimeSpan((int)days, 0, 0, 0);
                             user.LicenseExpired = newTime;
                             ctx.DB.UpdateUserLicenseExpired(user);
-                            RemoveDataFromUser();
+                            await SendOkMsgAndReturn(newTime);
                             return true;
                         }
                     }

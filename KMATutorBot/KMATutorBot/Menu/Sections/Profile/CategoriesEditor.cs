@@ -20,7 +20,7 @@ namespace KMATutorBot.Menu.Sections
         private const string ADD_CATEGORY_TEXT = BotMessages.ADD_CATEGORY_TEXT;
         private const string REMOVE_CATEGORY_TEXT = BotMessages.REMOVE_CATEGORY_TEXT;
 
-        private static KeyboardButton[][] GenerateTeacherCategoriesReplyMarkup(BotUser user)
+        private static KeyboardButton[][] GenerateTeacherCategoriesReplyMarkup(Context ctx, BotUser user)
         {
             var strings = Application.Categories
                 .OrderBy(el => el.Name) // Actually, we can order by Id
@@ -31,7 +31,7 @@ namespace KMATutorBot.Menu.Sections
                     return sign + cat.Name;
                 })
                 .Concat(new[] { IM_NOT_A_TEACHER_TEXT });
-            var keyboard = GenerateKeyboardWithBacks(null, strings);
+            var keyboard = GenerateKeyboardWithBacks(ctx.Menu, strings);
             return keyboard;
         }
 
@@ -42,7 +42,7 @@ namespace KMATutorBot.Menu.Sections
                 Id = NextMenuSectionId(),
                 IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
                 Text = BotMessages.MY_PROFILE_MODIFY_TEACHER_CATEGORIES_TEXT,
-                CustomKeyboard = (ctx) => GenerateTeacherCategoriesReplyMarkup(ctx.User),
+                CustomKeyboard = (ctx) => GenerateTeacherCategoriesReplyMarkup(ctx, ctx.User),
                 Handle = async (ctx) =>
                 {
                     var text = ctx.MessageEvent.Message.Text;
@@ -60,7 +60,7 @@ namespace KMATutorBot.Menu.Sections
                             text: BotMessages.MY_PROFILE_YOU_ARE_NOT_A_TEACHER_ANYMORE,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
-                                Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
+                                Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx, ctx.User)
                             },
                             parseMode: ParseMode.Html
                         );
@@ -82,7 +82,7 @@ namespace KMATutorBot.Menu.Sections
                                 text: BotMessages.MY_PROFILE_TEACHER_ADDED_CATEGORY(category.Name),
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
-                                    Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
+                                    Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx, ctx.User)
                                 },
                                 parseMode: ParseMode.Html
                             );
@@ -94,7 +94,7 @@ namespace KMATutorBot.Menu.Sections
                                 text: BotMessages.MY_PROFILE_USE_ONE_OF_THE_PROPOSED_CATEGORIES,
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
-                                    Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
+                                    Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx, ctx.User)
                                 },
                                 parseMode: ParseMode.Html
                             );
@@ -116,7 +116,7 @@ namespace KMATutorBot.Menu.Sections
                                 text: BotMessages.MY_PROFILE_TEACHER_REMOVED_CATEGORY(category.Name),
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
-                                    Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
+                                    Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx, ctx.User)
                                 },
                                 parseMode: ParseMode.Html
                             );
@@ -128,7 +128,7 @@ namespace KMATutorBot.Menu.Sections
                                 text: BotMessages.MY_PROFILE_USE_ONE_OF_THE_PROPOSED_CATEGORIES,
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
-                                    Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
+                                    Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx, ctx.User)
                                 },
                                 parseMode: ParseMode.Html
                             );
@@ -141,7 +141,7 @@ namespace KMATutorBot.Menu.Sections
                             text: BotMessages.MY_PROFILE_USE_ONE_OF_THE_PROPOSED_CATEGORIES,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
-                                Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
+                                Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx, ctx.User)
                             },
                             parseMode: ParseMode.Html
                         );

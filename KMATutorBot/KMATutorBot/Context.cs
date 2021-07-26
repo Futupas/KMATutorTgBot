@@ -13,7 +13,7 @@ namespace KMATutorBot
     internal class Context
     {
         public BotUser User { get; set; } // Actually it must be { get; init; }, but this is a lil kostyl
-        public MenuSection Menu { get; init; }
+        public MenuSection Menu { get; set; }
         public Database DB { get; init; }
         public MessageEventArgs MessageEvent { get; init; }
         public ITelegramBotClient TelegramCLient { get; init; }
