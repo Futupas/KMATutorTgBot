@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using KMATutorBot.Models;
 
 namespace KMATutorBot
 {
     internal class Application
     {
         //todo remove this huge kostyl
-        public static Dictionary<int, string> Categories =
-                new() { { 1, "Math" }, { 2, "Programming" }, { 3, "Philosophy" } };
+        public static List<Category> Categories =
+                new() { new(1, "Math"), new(2, "Programming"), new(3, "Philosophy") };
 
         public Database DB { get; private set; }
         public Bot TelegramBot { get; private set; }

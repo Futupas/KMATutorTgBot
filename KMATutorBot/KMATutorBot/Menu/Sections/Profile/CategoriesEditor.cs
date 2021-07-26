@@ -23,12 +23,12 @@ namespace KMATutorBot.Menu.Sections
         private static KeyboardButton[][] GenerateTeacherCategoriesReplyMarkup(BotUser user)
         {
             return Application.Categories
-                .OrderBy(el => el.Value) // Actually, we can order by Id
+                .OrderBy(el => el.Name) // Actually, we can order by Id
                 .Select(cat =>
                 {
-                    var sign = (user.TeacherCategories != null && user.TeacherCategories.Contains(cat.Key)) ?
+                    var sign = (user.TeacherCategories != null && user.TeacherCategories.Contains(cat.Id)) ?
                         REMOVE_CATEGORY_TEXT : ADD_CATEGORY_TEXT;
-                    return sign + cat.Value;
+                    return sign + cat.Name;
                 })
                 .Concat(new[] { IM_NOT_A_TEACHER_TEXT })
                 .Concat(new string[] { MenuSection.BACK_TEXT, MenuSection.BACK_TO_START_TEXT })
@@ -89,18 +89,18 @@ namespace KMATutorBot.Menu.Sections
                     else if (text.StartsWith(ADD_CATEGORY_TEXT))
                     {
                         //todo different checks
-                        var category = text.Substring(ADD_CATEGORY_TEXT.Length);
-                        if (Application.Categories.ContainsValue(category))
+                        var categoryText = text.Substring(ADD_CATEGORY_TEXT.Length);
+                        var category = Application.Categories.FirstOrDefault(cat => cat.Name == categoryText);
+                        if (category != null)
                         {
-                            var catId = Application.Categories.FirstOrDefault(kvp => kvp.Value == category).Key;
                             var newCategories = (ctx.User.TeacherCategories ?? Array.Empty<int>())
-                                .Where(c => c != catId)
-                                .Concat(new[] { catId })
+                                .Where(c => c != category.Id)
+                                .Concat(new[] { category.Id })
                                 .ToArray();
                             ctx.User = ctx.DB.UpdateUserTeacherCategories(ctx.User, newCategories);
                             await ctx.TelegramCLient.SendTextMessageAsync(
                                 chatId: ctx.MessageEvent.Message.Chat,
-                                text: BotMessages.MY_PROFILE_TEACHER_ADDED_CATEGORY(category),
+                                text: BotMessages.MY_PROFILE_TEACHER_ADDED_CATEGORY(category.Name),
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
                                     Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
@@ -122,17 +122,17 @@ namespace KMATutorBot.Menu.Sections
                     else if (text.StartsWith(REMOVE_CATEGORY_TEXT))
                     {
                         //todo different checks
-                        var category = text.Substring(ADD_CATEGORY_TEXT.Length);
-                        if (Application.Categories.ContainsValue(category))
+                        var categoryText = text.Substring(ADD_CATEGORY_TEXT.Length);
+                        var category = Application.Categories.FirstOrDefault(cat => cat.Name == categoryText);
+                        if (category != null)
                         {
-                            var catId = Application.Categories.FirstOrDefault(kvp => kvp.Value == category).Key;
                             var newCategories = (ctx.User.TeacherCategories ?? Array.Empty<int>())
-                                .Where(c => c != catId)
+                                .Where(c => c != category.Id)
                                 .ToArray();
                             ctx.User = ctx.DB.UpdateUserTeacherCategories(ctx.User, newCategories);
                             await ctx.TelegramCLient.SendTextMessageAsync(
                                 chatId: ctx.MessageEvent.Message.Chat,
-                                text: BotMessages.MY_PROFILE_TEACHER_REMOVED_CATEGORY(category),
+                                text: BotMessages.MY_PROFILE_TEACHER_REMOVED_CATEGORY(category.Name),
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
                                     Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
