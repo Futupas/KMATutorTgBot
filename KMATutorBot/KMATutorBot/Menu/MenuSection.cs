@@ -21,6 +21,7 @@ namespace KMATutorBot.Menu
         public const string BACK_TO_START_TEXT = BotMessages.BACK_TO_ROOT_TEXT;
 
         public int Id { get; init; }
+        /// <summary>Text in keyboard</summary>
         public string Text { get; init; }
         public List<MenuSection> Children { get; set; } = new();
         public MenuSection Parent { get; set; }
@@ -34,6 +35,8 @@ namespace KMATutorBot.Menu
 
         /// <summary>Needs back and backToMenu</summary>
         public Func<Context, KeyboardButton[][]> CustomKeyboard { get; set; } = null;
+        /// <summary>Text in message</summary>
+        public Func<Context, string> CustomText { get; set; } = null;
 
         public Func<Context, Task<bool>> OnOpen { get; init; } = null;
 
@@ -68,7 +71,7 @@ namespace KMATutorBot.Menu
                 {
                     await context.TelegramCLient.SendTextMessageAsync(
                         chatId: context.MessageEvent.Message.Chat,
-                        text: BotMessages.YOU_ARE_ON_MENU_SECTION(submenu.Text),
+                        text: submenu.CustomText == null ? BotMessages.YOU_ARE_ON_MENU_SECTION(submenu.Text) : submenu.CustomText(context),
                         replyMarkup: new ReplyKeyboardMarkup()
                         {
                             Keyboard = submenu.CustomKeyboard == null ?
@@ -123,6 +126,21 @@ namespace KMATutorBot.Menu
             return false;
         }
 
+        public static async Task<bool> SendUnknownCommand(Context context, KeyboardButton[][]? keyboardButtons)
+        {
+            await context.TelegramCLient.SendTextMessageAsync(
+                chatId: context.MessageEvent.Message.Chat,
+                text: BotMessages.UNKNOWN_COMMAND,
+                replyMarkup: new ReplyKeyboardMarkup()
+                {
+                    Keyboard = keyboardButtons ??
+                        (context.Menu.CustomKeyboard == null ? null : context.Menu.CustomKeyboard(context)) ??
+                        MenuSectionsGenerator.GenerateKeyboardWithBacks(context, Enumerable.Empty<string>())
+                },
+                parseMode: ParseMode.Html
+            );
+            return true;
+        }
         public MenuSection (bool isRoot = false)
         {
             if (isRoot)

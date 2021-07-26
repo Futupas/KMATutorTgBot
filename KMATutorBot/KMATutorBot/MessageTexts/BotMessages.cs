@@ -52,6 +52,19 @@ namespace KMATutorBot.MessageTexts
             return $"Ookey, for u we found these students (limit 10):\n\n" + string.Join("\n\n", body);
         }
 
+        public const string ADMIN_PANEL_MENU_TEXT = @"Admin panel";
+        public const string ADMIN_PANEL_LICENSES_EDITOR_MENU_TEXT = @"Licenses editor";
+        public const string ADMIN_PANEL_LICENSES_EDITOR_MESSAGE = @"Okey, now enter telegram nickname of person you want to change licence";
+        public const string ADMIN_PANEL_LICENSES_USER_WITH_THIS_NICK_NOT_EXISTS = @"User with such nickname does not exist";
+        public static string ADMIN_PANEL_LICENSES_SET_USER_LICENSE(Context ctx, Models.BotUser user) =>
+            $"Okey, now choose license plan for user {user.DisplayName}, or enter your quantity of days";
+        public const string ADMIN_PANEL_LICENSES_DEFAULT_PLAN_1_MINUTE = @"1 minute";
+        public const string ADMIN_PANEL_LICENSES_DEFAULT_PLAN_1_DAY = @"1 day";
+        public const string ADMIN_PANEL_LICENSES_DEFAULT_PLAN_1_WEEK = @"1 week";
+        public const string ADMIN_PANEL_LICENSES_DEFAULT_PLAN_10000_DAYS = @"10k days";
+        public const string ADMIN_PANEL_LICENSES_DEFAULT_PLAN_REMOVE_LICENSE = @"Remove license";
+        public static string ADMIN_PANEL_LICENSES_UPDATED_SUCCESSFULLY(Context ctx, Models.BotUser user, DateTime? newTime) =>
+            $"License updates successfully";
     }
 
     //todo make commands

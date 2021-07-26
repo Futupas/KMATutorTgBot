@@ -1,6 +1,8 @@
 ﻿using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace KMATutorBot.Models
 {
@@ -40,7 +42,7 @@ namespace KMATutorBot.Models
 
         [BsonElement("licenseExpired")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-        public DateTime? LicenseExpired { get; private set; } = null;
+        public DateTime? LicenseExpired { get; set; } = null;
 
         /// <summary>
         /// True, if license is valid right now
@@ -53,5 +55,8 @@ namespace KMATutorBot.Models
                 return DateTime.Now <= LicenseExpired;
             }
         }
+
+        [BsonElement("data")]
+        public Dictionary<string, object> Data { get; set; } = new();
     }
 }

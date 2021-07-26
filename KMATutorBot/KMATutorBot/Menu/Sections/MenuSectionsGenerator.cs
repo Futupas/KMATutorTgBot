@@ -60,6 +60,7 @@ namespace KMATutorBot.Menu.Sections
             GenerateRoot();
             GenerateProfile();
             GenerateFinder();
+            GenerateAdminPanel();
 
             return (_Root, AllSections);
         }

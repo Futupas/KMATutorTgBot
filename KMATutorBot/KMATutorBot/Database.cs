@@ -48,6 +48,16 @@ namespace KMATutorBot
                 return (user, false);
             }
         }
+        public Models.BotUser UpdateUserData(Models.BotUser user)
+        {
+            BotUsers.UpdateOne(u => u.Id == user.Id, Builders<Models.BotUser>.Update.Set("data", user.Data));
+            return user;
+        }
+        public Models.BotUser UpdateUserLicenseExpired(Models.BotUser user)
+        {
+            BotUsers.UpdateOne(u => u.Id == user.Id, Builders<Models.BotUser>.Update.Set("licenseExpired", user.LicenseExpired));
+            return user;
+        }
         public Models.BotUser UpdateUserMenuSection(Models.BotUser user, MenuSection newMenuSection)
         {
             if (user == null || newMenuSection == null) return user;
@@ -87,6 +97,16 @@ namespace KMATutorBot
                 .ToEnumerable();
 
             return teachers;
+        }
+        /// <param name="categories">Can be null</param>
+        public Models.BotUser GetUserByTelegramNickname(string nickname)
+        {
+            if (string.IsNullOrEmpty(nickname)) return null;
+
+            var user = BotUsers
+                .Find(u => u.TelegramUsername != null && u.TelegramUsername.ToLower() == nickname.ToLower())
+                .FirstOrDefault();
+            return user;
         }
 
         #endregion
