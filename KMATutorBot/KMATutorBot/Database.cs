@@ -40,6 +40,11 @@ namespace KMATutorBot
             }
             else
             {
+                if (user.TelegramUsername != source.TelegramUsername)
+                {
+                    user.TelegramUsername = source.TelegramUsername;
+                    BotUsers.UpdateOne(u => u.Id == user.Id, Builders<Models.BotUser>.Update.Set("telegramUsername", source.TelegramUsername));
+                }
                 return (user, false);
             }
         }

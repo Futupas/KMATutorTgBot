@@ -16,6 +16,9 @@ namespace KMATutorBot.Models
         [BsonElement("displayName")]
         public string DisplayName { get; set; } = null;
 
+        [BsonElement("telegramUsername")]
+        public string TelegramUsername { get; set; } = null;
+
         /// <summary>About me information</summary>
         [BsonElement("description")]
         public string Description { get; set; }

@@ -51,7 +51,8 @@ namespace KMATutorBot
                 TelegramName = userName,
                 DisplayName = userName,
                 RegistrationMessage = e.Message.Text,
-                RegistrationDate = DateTimeOffset.Now.ToUnixTimeSeconds()
+                RegistrationDate = DateTimeOffset.Now.ToUnixTimeSeconds(),
+                TelegramUsername = e.Message.From.Username
             };
             var userTuple = DB.GetOrCreateUser(user);
             user = userTuple.user;
