@@ -9,8 +9,10 @@ using KMATutorBot.Menu;
 
 namespace KMATutorBot
 {
-    internal class Database: IDatabase
+    internal class Database
     {
+        private const string CONNECTION_STRING = @"mongodb+srv://user1:user1user1@cluster0.di7oe.mongodb.net/test";
+
         private MongoClient Client { get; set; }
         private IMongoDatabase DB { get; set; }
 
@@ -20,7 +22,7 @@ namespace KMATutorBot
 
         public Database()
         {
-            Client = new MongoClient(IDatabase.CONNECTION_STRING);
+            Client = new MongoClient(CONNECTION_STRING);
             DB = Client.GetDatabase("MainDB");
 
             BotUsers = DB.GetCollection<Models.BotUser>("BotUsers");
