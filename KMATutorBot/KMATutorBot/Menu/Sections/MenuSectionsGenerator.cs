@@ -97,50 +97,7 @@ namespace KMATutorBot.Menu.Sections
         //}
         public static KeyboardButton[][] GenerateKeyboardWithBacks(MenuSection newSection, params string[] buttons)
         {
-            if (buttons == null) buttons = Array.Empty<string>();
-
-            if (newSection == null)
-            {
-                return buttons
-                    .Where(btn => !string.IsNullOrEmpty(btn))
-                    .Distinct()
-                    .Select(btn => new KeyboardButton[] { new(btn) })
-                    .Concat(new KeyboardButton[][] {
-                        new KeyboardButton[] { new(MenuSection.BACK_TEXT), new(MenuSection.BACK_TO_START_TEXT) }
-                    })
-                    .ToArray();
-            }
-
-            if (newSection.IsRoot)
-            {
-                return buttons
-                    .Where(btn => !string.IsNullOrEmpty(btn))
-                    .Distinct()
-                    .Select(btn => new KeyboardButton[] { new(btn) })
-                    .ToArray();
-            }
-            else if (newSection.Parent != null && newSection.Parent.IsRoot)
-            {
-                return buttons
-                    .Where(btn => !string.IsNullOrEmpty(btn))
-                    .Distinct()
-                    .Select(btn => new KeyboardButton[] { new(btn) })
-                    .Concat(new KeyboardButton[][] {
-                        new KeyboardButton[] { new(MenuSection.BACK_TO_START_TEXT) }
-                    })
-                    .ToArray();
-            }
-            else
-            {
-                return buttons
-                    .Where(btn => !string.IsNullOrEmpty(btn))
-                    .Distinct()
-                    .Select(btn => new KeyboardButton[] { new(btn) })
-                    .Concat(new KeyboardButton[][] {
-                        new KeyboardButton[] { new(MenuSection.BACK_TEXT), new(MenuSection.BACK_TO_START_TEXT) }
-                    })
-                    .ToArray();
-            }
+            return GenerateKeyboardWithBacks(newSection, buttons as IEnumerable<string>);
         }
         public static KeyboardButton[][] GenerateKeyboardWithBacks(MenuSection newSection, IEnumerable<string> buttons)
         {

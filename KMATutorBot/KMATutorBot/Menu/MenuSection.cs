@@ -60,7 +60,7 @@ namespace KMATutorBot.Menu
                     replyMarkup: new ReplyKeyboardMarkup()
                     {
                         Keyboard = currentMenu.CustomKeyboard == null ?
-                            MenuSectionsGenerator.GenerateKeyboardWithBacks(context.Menu, currentMenu.GetSubMenus(context.User)) :
+                            MenuSectionsGenerator.GenerateKeyboardWithBacks(currentMenu, currentMenu.GetSubMenus(context.User)) :
                             currentMenu.CustomKeyboard(context)
                     },
                     parseMode: ParseMode.Html
