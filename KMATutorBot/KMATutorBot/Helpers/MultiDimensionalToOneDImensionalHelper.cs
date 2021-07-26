@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace KMATutorBot.Helpers
 {
+    /// <summary>
+    /// Useless class, but it can be useful in future
+    /// </summary>
     internal static class MultiDimensionalToOneDImensionalHelper
     {
         public static IEnumerable<T> Convert2DimensionalTo1Dimensional<T>(IEnumerable<IEnumerable<T>> arr)

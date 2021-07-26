@@ -16,7 +16,6 @@ namespace KMATutorBot
 
         public Database DB { get; private set; }
         public Bot TelegramBot { get; private set; }
-        //public (List<(int id, string name)> Students, List<(int id, string name)> Teachers) Categiries = (new(), new());
 
         public Application()
         {
