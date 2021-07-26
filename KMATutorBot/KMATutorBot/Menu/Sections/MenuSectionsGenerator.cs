@@ -77,5 +77,22 @@ namespace KMATutorBot.Menu.Sections
                 .ToArray();
             return result;
         }
+        private static KeyboardButton[][] GenerateKeyboard(params IEnumerable<string>[] buttons)
+        {
+            if (buttons == null) return null;
+
+            //var buttons1Dimensional = buttons.Aggregate((accumulator, element) => accumulator.Concat(element));
+
+            var buttons1Dimensional = (buttons as IEnumerable<IEnumerable<string>>)
+                .Aggregate((accumulator, element) => accumulator.Concat(element));
+
+            // todo maybe add trim
+            var result = buttons1Dimensional
+                .Where(btn => !string.IsNullOrEmpty(btn))
+                .Distinct()
+                .Select(btn => new KeyboardButton[] { new(btn) })
+                .ToArray();
+            return result;
+        }
     }
 }

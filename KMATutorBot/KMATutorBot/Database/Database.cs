@@ -76,14 +76,6 @@ namespace KMATutorBot
         }
 
         /// <param name="categories">Can be null</param>
-        public Models.BotUser UpdateUserStudentCategories(Models.BotUser user, int[] categories)
-        {
-            if (user == null) return user;
-            BotUsers.UpdateOne(u => u.Id == user.Id, Builders<Models.BotUser>.Update.Set("studentCategories", categories));
-            user.StudentCategories = categories;
-            return user;
-        }
-        /// <param name="categories">Can be null</param>
         public Models.BotUser UpdateUserTeacherCategories(Models.BotUser user, int[] categories)
         {
             if (user == null) return user;
@@ -92,26 +84,36 @@ namespace KMATutorBot
             return user;
         }
 
-        public IEnumerable<Models.BotUser> GetAllFreeStudents(int[] categories, int? limit = 10)
+        //public IEnumerable<Models.BotUser> GetAllFreeStudents(int[] categories, int? limit = 10)
+        //{
+        //    if (categories == null || !categories.Any()) return Array.Empty<Models.BotUser>();
+
+        //    var filterBuilder = Builders<Models.BotUser>.Filter.Where(user => user.StudentCategories != null);
+        //    filterBuilder &= Builders<Models.BotUser>.Filter.AnyIn(user => user.StudentCategories, categories);
+
+        //    var students = BotUsers
+        //        .Find(filterBuilder)
+        //        .Limit(limit)
+        //        .ToEnumerable();
+
+        //    return students;
+        //}
+        //public IEnumerable<Models.BotUser> GetAllFreeTeachers(int[] categories, int? limit = 10)
+        //{
+        //    //todo refactor this as students finder
+        //    if (categories == null || !categories.Any()) return Array.Empty<Models.BotUser>();
+
+        //    var teachers = BotUsers
+        //        .Find(user => user.TeacherCategories != null && user.TeacherCategories.Intersect(categories).Any())
+        //        .Limit(limit)
+        //        .ToEnumerable();
+
+        //    return teachers;
+        //}
+        public IEnumerable<Models.BotUser> GetTeachersByCategory(int category, int? limit = 10)
         {
-            if (categories == null || !categories.Any()) return Array.Empty<Models.BotUser>();
-
-            var filterBuilder = Builders<Models.BotUser>.Filter.Where(user => user.StudentCategories != null);
-            filterBuilder &= Builders<Models.BotUser>.Filter.AnyIn(user => user.StudentCategories, categories);
-
-            var students = BotUsers
-                .Find(filterBuilder)
-                .Limit(limit)
-                .ToEnumerable();
-
-            return students;
-        }
-        public IEnumerable<Models.BotUser> GetAllFreeTeachers(int[] categories, int? limit = 10)
-        {
-            if (categories == null || !categories.Any()) return Array.Empty<Models.BotUser>();
-
             var teachers = BotUsers
-                .Find(user => user.TeacherCategories != null && user.TeacherCategories.Intersect(categories).Any())
+                .Find(user => user.TeacherCategories != null && user.TeacherCategories.Contains(category))
                 .Limit(limit)
                 .ToEnumerable();
 

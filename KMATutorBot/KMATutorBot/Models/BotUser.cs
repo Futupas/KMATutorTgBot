@@ -14,7 +14,7 @@ namespace KMATutorBot.Models
         public int MenuSection { get; set; } = 0;
 
         [BsonElement("displayName")]
-        public string DisplayName { get; set; } //todo may be get; init...
+        public string DisplayName { get; set; } = null;
 
         /// <summary>About me information</summary>
         [BsonElement("description")]
@@ -22,9 +22,6 @@ namespace KMATutorBot.Models
 
         [BsonElement("telegramName")]
         public string TelegramName { get; init; } // I'm not sure, it is nesessary
-
-        [BsonElement("studentCategories")]
-        public int[] StudentCategories { get; set; } = null; // null if user isn't student
 
         [BsonElement("teacherCategories")]
         public int[] TeacherCategories { get; set; } = null; // null if user isn't teacher

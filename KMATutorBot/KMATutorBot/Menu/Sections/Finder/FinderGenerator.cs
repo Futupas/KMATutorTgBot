@@ -12,40 +12,30 @@ namespace KMATutorBot.Menu.Sections
     {
         private static void GenerateFinder()
         {
-            //var registrationMenu = new MenuSection()
-            //{
-            //    Id = NextMenuSectionId(),
-            //    IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
-            //    Text = BotMessages.MY_PROFILE_MENU_TEXT,
-            //};
-            //AddMenuSection(_Root, registrationMenu);
-
-            //GenerateNameProfileEditor(registrationMenu);
-            //GenerateDescriptionProfileEditor(registrationMenu);
-            //GenerateStudentCategoriesProfileEditor(registrationMenu);
-            //GenerateTeacherCategoriesProfileEditor(registrationMenu);
-
-            GenerateStudentFinder();
+            GenerateTeacherFinder();
         }
 
-        private static void GenerateStudentFinder()
+        private static void GenerateTeacherFinder()
         {
             var finderMenu = new MenuSection()
             {
                 Id = NextMenuSectionId(),
-                IsForUser = MenuSection.FORUSER_SAMPLE_TEACHERS_ONLY,
-                Text = BotMessages.FINDER_FIND_STUDENTS_MENU_TEXT,
+                IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
+                Text = BotMessages.FINDER_FIND_TEACHERS_MENU_TEXT,
                 OnOpen = async (ctx) =>
                 {
-                    var students = ctx.DB.GetAllFreeStudents(ctx.User.TeacherCategories)
-                        .Where(st => st.Id != ctx.User.Id);
+                    //var students = ctx.DB.GetAllFreeStudents(ctx.User.TeacherCategories)
+                    //    .Where(st => st.Id != ctx.User.Id);
                     // students == null || !students.Any() - check on BotMessages
+
+                    var categories = Application.Categories.Select(cat => cat.Value);
+
                     await ctx.TelegramCLient.SendTextMessageAsync(
                         chatId: ctx.MessageEvent.Message.Chat,
-                        text: BotMessages.FINDER_WE_FOUND_STUDENTS_TEXT(ctx.User, students),
+                        text: BotMessages.FINDER_FIND_TEACHERS_SELECT_CATEGORY_TEXT,
                         replyMarkup: new ReplyKeyboardMarkup()
                         {
-                            Keyboard = GenerateKeyboard(BotMessages.FINDER_SEARCH_AGAIN_TEXT, MenuSection.BACK_TEXT, MenuSection.BACK_TO_START_TEXT)
+                            Keyboard = GenerateKeyboard(categories, new[] { MenuSection.BACK_TEXT, MenuSection.BACK_TO_START_TEXT })
                         }
                     );
                     return true;
@@ -60,7 +50,7 @@ namespace KMATutorBot.Menu.Sections
                             text: BotMessages.UNKNOWN_COMMAND,
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
-                                Keyboard = GenerateKeyboard(BotMessages.FINDER_SEARCH_AGAIN_TEXT, MenuSection.BACK_TEXT, MenuSection.BACK_TO_START_TEXT)
+                                Keyboard = GenerateKeyboard(Application.Categories.Select(cat => cat.Value), new[] { MenuSection.BACK_TEXT, MenuSection.BACK_TO_START_TEXT })
                             }
                         );
                         return true;
@@ -79,20 +69,34 @@ namespace KMATutorBot.Menu.Sections
                         );
                         return true;
                     }
-                    if (text == BotMessages.FINDER_SEARCH_AGAIN_TEXT)
+
+                    // todo refactor
+                    if (Application.Categories.ContainsValue(text))
                     {
-                        if (ctx.Menu.OnOpen == null) return false; // Impossible condition
-                        return await ctx.Menu.OnOpen(ctx);
+                        var category = Application.Categories.First(cat => cat.Value == text);
+                        var teachers = ctx.DB.GetTeachersByCategory(category.Key);
+                        var replyText = BotMessages.FINDER_WE_FOUND_TEACHERS_TEXT(teachers);
+                        await ctx.TelegramCLient.SendTextMessageAsync(
+                            chatId: ctx.MessageEvent.Message.Chat,
+                            text: replyText,
+                            replyMarkup: new ReplyKeyboardMarkup()
+                            {
+                                Keyboard = GenerateKeyboard(Application.Categories.Select(cat => cat.Value), new[] { MenuSection.BACK_TEXT, MenuSection.BACK_TO_START_TEXT })
+                            }
+                        );
+                    }
+                    else
+                    {
+                        await ctx.TelegramCLient.SendTextMessageAsync(
+                            chatId: ctx.MessageEvent.Message.Chat,
+                            text: BotMessages.MY_PROFILE_TEACHER_INCORRECT_CATEGORY_TEXT,
+                            replyMarkup: new ReplyKeyboardMarkup()
+                            {
+                                Keyboard = GenerateKeyboard(Application.Categories.Select(cat => cat.Value), new[] { MenuSection.BACK_TEXT, MenuSection.BACK_TO_START_TEXT })
+                            }
+                        );
                     }
 
-                    await ctx.TelegramCLient.SendTextMessageAsync(
-                        chatId: ctx.MessageEvent.Message.Chat,
-                        text: BotMessages.UNKNOWN_COMMAND,
-                        replyMarkup: new ReplyKeyboardMarkup()
-                        {
-                            Keyboard = GenerateKeyboard(BotMessages.FINDER_SEARCH_AGAIN_TEXT, MenuSection.BACK_TEXT, MenuSection.BACK_TO_START_TEXT)
-                        }
-                    );
                     return true;
                 }
             };
