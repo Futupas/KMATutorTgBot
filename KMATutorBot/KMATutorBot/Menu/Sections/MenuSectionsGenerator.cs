@@ -65,7 +65,7 @@ namespace KMATutorBot.Menu.Sections
         }
 
 
-        private static KeyboardButton[][] GenerateKeyboard(params string[] buttons)
+        public static KeyboardButton[][] GenerateKeyboard(params string[] buttons)
         {
             if (buttons == null) return null;
 
@@ -77,7 +77,7 @@ namespace KMATutorBot.Menu.Sections
                 .ToArray();
             return result;
         }
-        private static KeyboardButton[][] GenerateKeyboard(params IEnumerable<string>[] buttons)
+        public static KeyboardButton[][] GenerateKeyboard(params IEnumerable<string>[] buttons)
         {
             if (buttons == null) return null;
 
@@ -93,6 +93,100 @@ namespace KMATutorBot.Menu.Sections
                 .Select(btn => new KeyboardButton[] { new(btn) })
                 .ToArray();
             return result;
+        }
+        public static KeyboardButton[][] GenerateKeyboardWithBacks(Context? ctx, params string[] buttons)
+        {
+            if (buttons == null) buttons = Array.Empty<string>();
+
+            if (ctx == null)
+            {
+                return buttons
+                    .Where(btn => !string.IsNullOrEmpty(btn))
+                    .Distinct()
+                    .Select(btn => new KeyboardButton[] { new(btn) })
+                    .Concat(new KeyboardButton[][] {
+                        new KeyboardButton[] { new(MenuSection.BACK_TEXT), new(MenuSection.BACK_TO_START_TEXT) }
+                    })
+                    .ToArray();
+            }
+
+            if (ctx.Menu.IsRoot)
+            {
+                return buttons
+                    .Where(btn => !string.IsNullOrEmpty(btn))
+                    .Distinct()
+                    .Select(btn => new KeyboardButton[] { new(btn) })
+                    .ToArray();
+            }
+            else if (ctx.Menu.Parent != null && ctx.Menu.Parent.IsRoot)
+            {
+                return buttons
+                    .Where(btn => !string.IsNullOrEmpty(btn))
+                    .Distinct()
+                    .Select(btn => new KeyboardButton[] { new(btn) })
+                    .Concat(new KeyboardButton[][] {
+                        new KeyboardButton[] { new(MenuSection.BACK_TO_START_TEXT) }
+                    })
+                    .ToArray();
+            }
+            else
+            {
+                return buttons
+                    .Where(btn => !string.IsNullOrEmpty(btn))
+                    .Distinct()
+                    .Select(btn => new KeyboardButton[] { new(btn) })
+                    .Concat(new KeyboardButton[][] {
+                        new KeyboardButton[] { new(MenuSection.BACK_TEXT), new(MenuSection.BACK_TO_START_TEXT) }
+                    })
+                    .ToArray();
+            }
+        }
+        public static KeyboardButton[][] GenerateKeyboardWithBacks(Context ctx, IEnumerable<string> buttons)
+        {
+            if (buttons == null) buttons = Array.Empty<string>();
+
+            if (ctx == null)
+            {
+                return buttons
+                    .Where(btn => !string.IsNullOrEmpty(btn))
+                    .Distinct()
+                    .Select(btn => new KeyboardButton[] { new(btn) })
+                    .Concat(new KeyboardButton[][] {
+                        new KeyboardButton[] { new(MenuSection.BACK_TEXT), new(MenuSection.BACK_TO_START_TEXT) }
+                    })
+                    .ToArray();
+            }
+
+            if (ctx.Menu.IsRoot)
+            {
+                return buttons
+                    .Where(btn => !string.IsNullOrEmpty(btn))
+                    .Distinct()
+                    .Select(btn => new KeyboardButton[] { new(btn) })
+                    .ToArray();
+            }
+            else if (ctx.Menu.Parent != null && ctx.Menu.Parent.IsRoot)
+            {
+                return buttons
+                    .Where(btn => !string.IsNullOrEmpty(btn))
+                    .Distinct()
+                    .Select(btn => new KeyboardButton[] { new(btn) })
+                    .Concat(new KeyboardButton[][] {
+                        new KeyboardButton[] { new(MenuSection.BACK_TO_START_TEXT) }
+                    })
+                    .ToArray();
+            }
+            else
+            {
+                return buttons
+                    .Where(btn => !string.IsNullOrEmpty(btn))
+                    .Distinct()
+                    .Select(btn => new KeyboardButton[] { new(btn) })
+                    .Concat(new KeyboardButton[][] {
+                        new KeyboardButton[] { new(MenuSection.BACK_TEXT), new(MenuSection.BACK_TO_START_TEXT) }
+                    })
+                    .ToArray();
+            }
         }
     }
 }

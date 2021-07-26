@@ -11,6 +11,7 @@ using Telegram.Bot.Types.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using Telegram.Bot.Types.ReplyMarkups;
 using KMATutorBot.MessageTexts;
+using KMATutorBot.Menu.Sections;
 
 namespace KMATutorBot.Menu
 {
@@ -83,6 +84,39 @@ namespace KMATutorBot.Menu
                 
             }
             return true;
+        }
+
+        public static async Task<bool> HandleEmptyOrBackString(string? text, Context context, KeyboardButton[][]? keyboardButtons)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                await context.TelegramCLient.SendTextMessageAsync(
+                    chatId: context.MessageEvent.Message.Chat,
+                    text: BotMessages.UNKNOWN_COMMAND,
+                    replyMarkup: new ReplyKeyboardMarkup()
+                    {
+                        Keyboard = keyboardButtons ??
+                            (context.Menu.CustomKeyboard == null ? null : context.Menu.CustomKeyboard(context)) ??
+                            MenuSectionsGenerator.GenerateKeyboardWithBacks(context, Enumerable.Empty<string>())
+                    }
+                );
+                return true;
+            }
+            if (text == MenuSection.BACK_TO_START_TEXT || text == MenuSection.BACK_TO_START_TEXT)
+            {
+                var newMenu = context.Menu.NextMenuSection(context.User, text);
+                context.User = context.DB.UpdateUserMenuSection(context.User, newMenu);
+                await context.TelegramCLient.SendTextMessageAsync(
+                    chatId: context.MessageEvent.Message.Chat,
+                    text: newMenu.Text,
+                    replyMarkup: new ReplyKeyboardMarkup()
+                    {
+                        Keyboard = newMenu.GetSubMenus(context.User).Select(menu => new KeyboardButton[] { new(menu) })
+                    }
+                );
+                return true;
+            }
+            return false;
         }
 
         public MenuSection (bool isRoot = false)
