@@ -43,10 +43,10 @@ namespace KMATutorBot.MessageTexts
             if (teachers == null || !teachers.Any()) return FINDER_NO_TEACHERS_TEXT;
             //todo add link to profile
             var body = teachers
-                .Select(st =>
+                .Select(tch =>
                 {
-                    var bodyNamePart = $"{st.DisplayName ?? "Unnamed student"}\n";
-                    var bodyDescriptionPart = st.Description == null ? "" : $"{st.Description}\n";
+                    var bodyNamePart = $"<a href=\"tg://user?id={tch.Id}\">{tch.DisplayName ?? "Unnamed teacher"}</a>";
+                    var bodyDescriptionPart = tch.Description == null ? "" : $"\n{tch.Description}";
                     return bodyNamePart + bodyDescriptionPart;
                 });
             return $"Ookey, for u we found these students (limit 10):\n\n" + string.Join("\n\n", body);

@@ -61,7 +61,8 @@ namespace KMATutorBot.Menu.Sections
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
                                 Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
-                            }
+                            },
+                            parseMode: ParseMode.Html
                         );
                     }
                     else if (text.StartsWith(ADD_CATEGORY_TEXT))
@@ -82,7 +83,8 @@ namespace KMATutorBot.Menu.Sections
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
                                     Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
-                                }
+                                },
+                                parseMode: ParseMode.Html
                             );
                         }
                         else
@@ -93,7 +95,8 @@ namespace KMATutorBot.Menu.Sections
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
                                     Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
-                                }
+                                },
+                                parseMode: ParseMode.Html
                             );
                         }
                     }
@@ -114,7 +117,8 @@ namespace KMATutorBot.Menu.Sections
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
                                     Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
-                                }
+                                },
+                                parseMode: ParseMode.Html
                             );
                         }
                         else
@@ -125,7 +129,8 @@ namespace KMATutorBot.Menu.Sections
                                 replyMarkup: new ReplyKeyboardMarkup()
                                 {
                                     Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
-                                }
+                                },
+                                parseMode: ParseMode.Html
                             );
                         }
                     }
@@ -137,7 +142,8 @@ namespace KMATutorBot.Menu.Sections
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
                                 Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
-                            }
+                            },
+                            parseMode: ParseMode.Html
                         );
                     }
                     return true;

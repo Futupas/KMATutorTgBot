@@ -44,7 +44,8 @@ namespace KMATutorBot.Menu.Sections
                         replyMarkup: new ReplyKeyboardMarkup()
                         {
                             Keyboard = parentMenu.GetSubMenus(ctx.User).Select(menu => new KeyboardButton[] { new(menu) })
-                        }
+                        },
+                        parseMode: ParseMode.Html
                     );
                     return true;
                 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KMATutorBot.MessageTexts;
+using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace KMATutorBot.Menu.Sections
@@ -33,7 +34,8 @@ namespace KMATutorBot.Menu.Sections
                         replyMarkup: new ReplyKeyboardMarkup()
                         {
                             Keyboard = GenerateKeyboard(categories, new[] { MenuSection.BACK_TO_START_TEXT })
-                        }
+                        },
+                        parseMode: ParseMode.Html
                     );
                     return true;
                 },
@@ -58,7 +60,8 @@ namespace KMATutorBot.Menu.Sections
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
                                 Keyboard = GenerateKeyboard(Application.Categories.Select(cat => cat.Name), new[] { MenuSection.BACK_TO_START_TEXT })
-                            }
+                            },
+                            parseMode: ParseMode.Html
                         );
                     }
                     else
@@ -69,7 +72,8 @@ namespace KMATutorBot.Menu.Sections
                             replyMarkup: new ReplyKeyboardMarkup()
                             {
                                 Keyboard = GenerateKeyboard(Application.Categories.Select(cat => cat.Name), new[] { MenuSection.BACK_TO_START_TEXT })
-                            }
+                            },
+                            parseMode: ParseMode.Html
                         );
                     }
 

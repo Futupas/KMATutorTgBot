@@ -58,7 +58,8 @@ namespace KMATutorBot.Menu
                         Keyboard = currentMenu.CustomKeyboard == null ?
                             currentMenu.GetSubMenus(context.User).Select(menu => new KeyboardButton[] { new(menu) }).ToArray() :
                             currentMenu.CustomKeyboard(context)
-                    }
+                    },
+                    parseMode: ParseMode.Html
                 );
             }
             else
@@ -73,7 +74,8 @@ namespace KMATutorBot.Menu
                             Keyboard = submenu.CustomKeyboard == null ?
                                 submenu.GetSubMenus(context.User).Select(menu => new KeyboardButton[] { new(menu) }).ToArray() :
                                 submenu.CustomKeyboard(context)
-                        }
+                        },
+                        parseMode: ParseMode.Html
                     );
                 }
                 else
@@ -98,7 +100,8 @@ namespace KMATutorBot.Menu
                         Keyboard = keyboardButtons ??
                             (context.Menu.CustomKeyboard == null ? null : context.Menu.CustomKeyboard(context)) ??
                             MenuSectionsGenerator.GenerateKeyboardWithBacks(context, Enumerable.Empty<string>())
-                    }
+                    },
+                    parseMode: ParseMode.Html
                 );
                 return true;
             }
@@ -112,7 +115,8 @@ namespace KMATutorBot.Menu
                     replyMarkup: new ReplyKeyboardMarkup()
                     {
                         Keyboard = newMenu.GetSubMenus(context.User).Select(menu => new KeyboardButton[] { new(menu) })
-                    }
+                    },
+                    parseMode: ParseMode.Html
                 );
                 return true;
             }
