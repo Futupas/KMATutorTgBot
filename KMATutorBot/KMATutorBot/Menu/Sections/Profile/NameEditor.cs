@@ -23,33 +23,13 @@ namespace KMATutorBot.Menu.Sections
                 Id = NextMenuSectionId(),
                 IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
                 Text = BotMessages.MY_PROFILE_DISPLAY_NAME_MENU_TEXT,
+                CustomKeyboard = (ctx) => GenerateKeyboardWithBacks(null, null),
                 Handle = async (ctx) =>
                 {
                     var text = ctx.MessageEvent.Message.Text;
-                    if (string.IsNullOrEmpty(text))
+
+                    if (await MenuSection.HandleEmptyOrBackString(text, ctx, null))
                     {
-                        await ctx.TelegramCLient.SendTextMessageAsync(
-                            chatId: ctx.MessageEvent.Message.Chat,
-                            text: BotMessages.MY_PROFILE_ENTER_NOT_EMPTY_NAME,
-                            replyMarkup: new ReplyKeyboardMarkup()
-                            {
-                                Keyboard = new KeyboardButton[][] { new KeyboardButton[] { new(MenuSection.BACK_TEXT) }, new KeyboardButton[] { new(MenuSection.BACK_TO_START_TEXT) } }
-                            }
-                        );
-                        return true;
-                    }
-                    if (text == MenuSection.BACK_TEXT || text == MenuSection.BACK_TO_START_TEXT)
-                    {
-                        var newMenu = ctx.Menu.NextMenuSection(ctx.User, text);
-                        ctx.User = ctx.DB.UpdateUserMenuSection(ctx.User, newMenu);
-                        await ctx.TelegramCLient.SendTextMessageAsync(
-                            chatId: ctx.MessageEvent.Message.Chat,
-                            text: newMenu.Text,
-                            replyMarkup: new ReplyKeyboardMarkup()
-                            {
-                                Keyboard = newMenu.GetSubMenus(ctx.User).Select(menu => new KeyboardButton[] { new(menu) })
-                            }
-                        );
                         return true;
                     }
 

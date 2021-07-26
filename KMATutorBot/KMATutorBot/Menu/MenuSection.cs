@@ -102,7 +102,7 @@ namespace KMATutorBot.Menu
                 );
                 return true;
             }
-            if (text == MenuSection.BACK_TO_START_TEXT || text == MenuSection.BACK_TO_START_TEXT)
+            if (text == MenuSection.BACK_TEXT || text == MenuSection.BACK_TO_START_TEXT)
             {
                 var newMenu = context.Menu.NextMenuSection(context.User, text);
                 context.User = context.DB.UpdateUserMenuSection(context.User, newMenu);

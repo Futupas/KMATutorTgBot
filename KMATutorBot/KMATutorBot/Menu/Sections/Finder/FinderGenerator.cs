@@ -40,32 +40,6 @@ namespace KMATutorBot.Menu.Sections
                 Handle = async (ctx) =>
                 {
                     var text = ctx.MessageEvent.Message.Text;
-                    //if (string.IsNullOrEmpty(text))
-                    //{
-                    //    await ctx.TelegramCLient.SendTextMessageAsync(
-                    //        chatId: ctx.MessageEvent.Message.Chat,
-                    //        text: BotMessages.UNKNOWN_COMMAND,
-                    //        replyMarkup: new ReplyKeyboardMarkup()
-                    //        {
-                    //            Keyboard = GenerateKeyboard(Application.Categories.Select(cat => cat.Name), new[] { MenuSection.BACK_TO_START_TEXT })
-                    //        }
-                    //    );
-                    //    return true;
-                    //}
-                    //if (text == MenuSection.BACK_TO_START_TEXT)
-                    //{
-                    //    var newMenu = ctx.Menu.NextMenuSection(ctx.User, text);
-                    //    ctx.User = ctx.DB.UpdateUserMenuSection(ctx.User, newMenu);
-                    //    await ctx.TelegramCLient.SendTextMessageAsync(
-                    //        chatId: ctx.MessageEvent.Message.Chat,
-                    //        text: newMenu.Text,
-                    //        replyMarkup: new ReplyKeyboardMarkup()
-                    //        {
-                    //            Keyboard = newMenu.GetSubMenus(ctx.User).Select(menu => new KeyboardButton[] { new(menu) })
-                    //        }
-                    //    );
-                    //    return true;
-                    //}
                     
                     if (await MenuSection.HandleEmptyOrBackString(text, ctx, null))
                     {

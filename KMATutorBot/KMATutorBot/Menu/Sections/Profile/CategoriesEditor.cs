@@ -22,7 +22,7 @@ namespace KMATutorBot.Menu.Sections
 
         private static KeyboardButton[][] GenerateTeacherCategoriesReplyMarkup(BotUser user)
         {
-            return Application.Categories
+            var strings = Application.Categories
                 .OrderBy(el => el.Name) // Actually, we can order by Id
                 .Select(cat =>
                 {
@@ -30,10 +30,9 @@ namespace KMATutorBot.Menu.Sections
                         REMOVE_CATEGORY_TEXT : ADD_CATEGORY_TEXT;
                     return sign + cat.Name;
                 })
-                .Concat(new[] { IM_NOT_A_TEACHER_TEXT })
-                .Concat(new string[] { MenuSection.BACK_TEXT, MenuSection.BACK_TO_START_TEXT })
-                .Select(str => new KeyboardButton[] { new(str) })
-                .ToArray();
+                .Concat(new[] { IM_NOT_A_TEACHER_TEXT });
+            var keyboard = GenerateKeyboardWithBacks(null, strings);
+            return keyboard;
         }
 
         private static void GenerateTeacherCategoriesProfileEditor(MenuSection regMenu)
@@ -47,30 +46,9 @@ namespace KMATutorBot.Menu.Sections
                 Handle = async (ctx) =>
                 {
                     var text = ctx.MessageEvent.Message.Text;
-                    if (string.IsNullOrEmpty(text))
+
+                    if (await MenuSection.HandleEmptyOrBackString(text, ctx, null))
                     {
-                        await ctx.TelegramCLient.SendTextMessageAsync(
-                            chatId: ctx.MessageEvent.Message.Chat,
-                            text: BotMessages.MY_PROFILE_USE_ONE_OF_THE_PROPOSED_CATEGORIES,
-                            replyMarkup: new ReplyKeyboardMarkup()
-                            {
-                                Keyboard = GenerateTeacherCategoriesReplyMarkup(ctx.User)
-                            }
-                        );
-                        return true;
-                    }
-                    if (text == MenuSection.BACK_TEXT || text == MenuSection.BACK_TO_START_TEXT)
-                    {
-                        var newMenu = ctx.Menu.NextMenuSection(ctx.User, text);
-                        ctx.User = ctx.DB.UpdateUserMenuSection(ctx.User, newMenu);
-                        await ctx.TelegramCLient.SendTextMessageAsync(
-                            chatId: ctx.MessageEvent.Message.Chat,
-                            text: newMenu.Text,
-                            replyMarkup: new ReplyKeyboardMarkup()
-                            {
-                                Keyboard = newMenu.GetSubMenus(ctx.User).Select(menu => new KeyboardButton[] { new(menu) })
-                            }
-                        );
                         return true;
                     }
 
