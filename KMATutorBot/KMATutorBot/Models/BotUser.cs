@@ -12,6 +12,10 @@ namespace KMATutorBot.Models
         [BsonElement("telegramId")]
         public long Id { get; init; }
 
+        /// <summary>Proiority for search. Bigger is first, default is 0</summary>
+        [BsonElement("priority")]
+        public int Priority { get; init; } = 0;
+
         [BsonElement("menuSection")]
         public int MenuSection { get; set; } = 0;
 

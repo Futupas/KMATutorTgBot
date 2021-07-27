@@ -91,8 +91,13 @@ namespace KMATutorBot
 
         public IEnumerable<Models.BotUser> GetTeachersByCategory(int category, int? limit = 10)
         {
+            //var teachers = BotUsers
+            //    .Find(user => user.TeacherCategories != null && user.TeacherCategories.Contains(category))
+            //    .Limit(limit)
+            //    .ToEnumerable();
             var teachers = BotUsers
-                .Find(user => user.TeacherCategories != null && user.TeacherCategories.Contains(category))
+                .Find(user => user.TeacherCategories != null && user.TeacherCategories.Contains(category) && user.LicenseExpired != null && user.LicenseExpired > DateTime.Now)
+                .SortByDescending(user => user.Priority)
                 .Limit(limit)
                 .ToEnumerable();
 

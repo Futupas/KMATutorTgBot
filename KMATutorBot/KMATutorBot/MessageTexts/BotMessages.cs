@@ -64,7 +64,7 @@ namespace KMATutorBot.MessageTexts
         public const string ADMIN_PANEL_LICENSES_DEFAULT_PLAN_10000_DAYS = @"10k days";
         public const string ADMIN_PANEL_LICENSES_DEFAULT_PLAN_REMOVE_LICENSE = @"Remove license";
         public static string ADMIN_PANEL_LICENSES_UPDATED_SUCCESSFULLY(Context ctx, Models.BotUser user, DateTime? newTime) =>
-            $"License updates successfully";
+            $"For user {user.DisplayName} license {(newTime == null ? "was ended" : $"will expire at {newTime.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm:ss")}")}";
     }
 
     //todo make commands
