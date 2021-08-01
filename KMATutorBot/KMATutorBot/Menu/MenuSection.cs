@@ -115,10 +115,11 @@ namespace KMATutorBot.Menu
                 context.User = context.DB.UpdateUserMenuSection(context.User, newMenu);
                 await context.TelegramCLient.SendTextMessageAsync(
                     chatId: context.MessageEvent.Message.Chat,
-                    text: newMenu.Text,
+                        text: newMenu.CustomText == null ? BotMessages.YOU_ARE_ON_MENU_SECTION(newMenu.Text) : newMenu.CustomText(context),
                     replyMarkup: new ReplyKeyboardMarkup()
                     {
-                        Keyboard = MenuSectionsGenerator.GenerateKeyboardWithBacks(newMenu, newMenu.GetSubMenus(context.User))
+                        Keyboard = keyboardButtons ??
+                            (newMenu.CustomKeyboard == null ? MenuSectionsGenerator.GenerateKeyboardWithBacks(newMenu, null) : newMenu.CustomKeyboard(context))
                     },
                     parseMode: ParseMode.Html
                 );

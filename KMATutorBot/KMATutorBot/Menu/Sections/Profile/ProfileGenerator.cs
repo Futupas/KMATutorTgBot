@@ -16,6 +16,7 @@ namespace KMATutorBot.Menu.Sections
                 Id = NextMenuSectionId(),
                 IsForUser = MenuSection.FORUSER_SAMPLE_ALL_USERS,
                 Text = BotMessages.MY_PROFILE_MENU_TEXT,
+                CustomText = BotMessages.MY_PROFILE_SECTION_TEXT
             };
             AddMenuSection(_Root, registrationMenu);
 

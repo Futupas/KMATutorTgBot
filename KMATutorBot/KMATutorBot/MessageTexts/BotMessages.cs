@@ -14,6 +14,29 @@ namespace KMATutorBot.MessageTexts
         public const string UNKNOWN_COMMAND = @"Unknown command(";
         public static string YOU_ARE_ON_MENU_SECTION(string menuSection) => $"U are on menu section {menuSection}";
         public const string ROOT_MENU_TEXT = @"Root menu";
+        public static string MY_PROFILE_SECTION_TEXT(Context ctx)
+        {
+            var u = ctx.User;
+            var commonInfo = $"<b>Info about you:</b>\nName: {ctx.User.DisplayName}\nAbout you: {ctx.User.Description}\n";
+            var teacherText = "Your teacher profile is NOT activated.\n";
+            if (u.TeacherCategories != null)
+            {
+                teacherText = "Your teacher profile is activated.\n";
+                var categories = Application.Categories
+                    .Where(c => u.TeacherCategories.Contains(c.Id))
+                    .Select(c => c.Name);
+                teacherText += categories.Any() ? 
+                    ("Your categories: " + string.Join(", ", categories) + "\n") : 
+                    "You have no categories added\n";
+            }
+            var licenseText = u.LicenseExpired == null ?
+                "Your license is BAD. It is not activated\n" :
+                u.LicenseExpired > DateTime.Now ?
+                    $"Your license is GOOD. It'll expire {u.LicenseExpired?.ToString("dd:MM:yyyy HH:mm:ss")} or you have {(u.LicenseExpired - DateTime.Now)?.TotalDays} days\n" :
+                    $"Your license is BAD. It expired {u.LicenseExpired?.ToString("dd:MM:yyyy HH:mm:ss")} or {(u.LicenseExpired - DateTime.Now)?.TotalDays} days ago\n";
+            var endText = "You can change any info by using buttons below";
+            return commonInfo + teacherText + licenseText + endText;
+        }
         public const string MY_PROFILE_MENU_TEXT = @"My profile";
         public const string MY_PROFILE_DISPLAY_NAME_MENU_TEXT = @"Display name";
         public const string MY_PROFILE_ENTER_NOT_EMPTY_NAME = @"Enter not empty name";
