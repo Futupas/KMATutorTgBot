@@ -31,6 +31,7 @@ namespace KMATutorBot
             Console.WriteLine($"Hello, World! I am user {me.Id} and my name is {me.FirstName}.");
 
             botClient.OnMessage += Bot_OnMessage;
+            botClient.OnCallbackQuery += Bot_OnCallback;
             botClient.StartReceiving();
 
             Console.WriteLine("Press any key to exit");
@@ -78,6 +79,38 @@ namespace KMATutorBot
             }
 
             await ctx.Menu.Handle(ctx);
+        }
+        private async void Bot_OnCallback(object sender, CallbackQueryEventArgs e)
+        {
+            Console.WriteLine($"Received a callback message from {e.CallbackQuery.From.Id}.");
+
+            var userName = e.CallbackQuery.From.FirstName + " " + e.CallbackQuery.From.LastName;
+            var user = new BotUser()
+            {
+                Id = e.CallbackQuery.From.Id,
+                TelegramName = userName,
+                DisplayName = userName,
+                TelegramUsername = e.CallbackQuery.From.Username
+            };
+            var userTuple = DB.GetOrCreateUser(user);
+            user = userTuple.user;
+
+            var ctx = new Context(user, DB, this.Menu.sections)
+            {
+                TelegramCLient = botClient,
+                CallbackEvent = e
+            };
+
+            if (userTuple.isNew)
+            {
+                return;
+            }
+
+            var resultTuple = await CallbackHandler.HandleCallback(ctx);
+            if (resultTuple.ok)
+            {
+                await botClient.AnswerCallbackQueryAsync(e.CallbackQuery.Id, resultTuple.message);
+            }
         }
     }
 }

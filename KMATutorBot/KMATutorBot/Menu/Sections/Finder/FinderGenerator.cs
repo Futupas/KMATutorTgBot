@@ -57,10 +57,10 @@ namespace KMATutorBot.Menu.Sections
                         await ctx.TelegramCLient.SendTextMessageAsync(
                             chatId: ctx.MessageEvent.Message.Chat,
                             text: replyText,
-                            replyMarkup: new ReplyKeyboardMarkup()
-                            {
-                                Keyboard = GenerateKeyboardWithBacks(ctx.Menu, Application.Categories.Select(cat => cat.Name))
-                            },
+                            replyMarkup: new InlineKeyboardMarkup(new InlineKeyboardButton[][] {
+                                new InlineKeyboardButton[] { new() { Text = "Text 1", CallbackData = "sssss" } },
+                                new InlineKeyboardButton[] { new() { Text = "Text 2", CallbackData = "ddddd" } }
+                            }),
                             parseMode: ParseMode.Html
                         );
                     }

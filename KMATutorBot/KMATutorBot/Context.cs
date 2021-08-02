@@ -16,6 +16,7 @@ namespace KMATutorBot
         public MenuSection Menu { get; set; }
         public Database DB { get; init; }
         public MessageEventArgs MessageEvent { get; init; }
+        public CallbackQueryEventArgs CallbackEvent { get; init; }
         public ITelegramBotClient TelegramCLient { get; init; }
 
         public List<MenuSection> MenuSections { get; init; }
