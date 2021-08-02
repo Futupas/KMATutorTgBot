@@ -18,6 +18,7 @@ namespace KMATutorBot
 
         #region Collections
         private IMongoCollection<Models.BotUser> BotUsers;
+        private IMongoCollection<Models.MatchResult> Matches;
         #endregion
 
         public Database()
@@ -26,6 +27,7 @@ namespace KMATutorBot
             DB = Client.GetDatabase("MainDB");
 
             BotUsers = DB.GetCollection<Models.BotUser>("BotUsers");
+            Matches = DB.GetCollection<Models.MatchResult>("Matches");
         }
 
         #region DAL
@@ -112,6 +114,19 @@ namespace KMATutorBot
                 .Find(u => u.TelegramUsername != null && u.TelegramUsername.ToLower() == nickname.ToLower())
                 .FirstOrDefault();
             return user;
+        }
+        public Models.MatchResult AddMatch(int student, int teacher, int category, Models.MatchResultType match)
+        {
+            var m = new Models.MatchResult()
+            {
+                Category = category,
+                Student = student,
+                Teacher = teacher,
+                Match = match
+            };
+
+            Matches.InsertOne(m);
+            return m;
         }
 
         #endregion

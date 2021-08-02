@@ -88,6 +88,12 @@ namespace KMATutorBot.MessageTexts
         public const string ADMIN_PANEL_LICENSES_DEFAULT_PLAN_REMOVE_LICENSE = @"Remove license";
         public static string ADMIN_PANEL_LICENSES_UPDATED_SUCCESSFULLY(Context ctx, Models.BotUser user, DateTime? newTime) =>
             $"For user {user.DisplayName} license {(newTime == null ? "was ended" : $"will expire at {newTime.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm:ss")}")}";
+
+
+        public const string MATCH_NEXT_TEXT = @"Next";
+        public const string MATCH_SAVE_TEXT = @"Save";
+        public const string MATCH_NEXT_ANSWER_TEXT = @"Skipped";
+        public const string MATCH_SAVE_ANSWER_TEXT = @"Saved!";
     }
 
     //todo make commands

@@ -53,13 +53,16 @@ namespace KMATutorBot.Menu.Sections
                     if (category != null)
                     {
                         var teachers = ctx.DB.GetTeachersByCategory(category.Id);
+                        var teacherId = teachers.Any() ? teachers.FirstOrDefault().Id : 0;
                         var replyText = BotMessages.FINDER_WE_FOUND_TEACHERS_TEXT(teachers);
                         await ctx.TelegramCLient.SendTextMessageAsync(
                             chatId: ctx.MessageEvent.Message.Chat,
                             text: replyText,
                             replyMarkup: new InlineKeyboardMarkup(new InlineKeyboardButton[][] {
-                                new InlineKeyboardButton[] { new() { Text = "Text 1", CallbackData = "sssss" } },
-                                new InlineKeyboardButton[] { new() { Text = "Text 2", CallbackData = "ddddd" } }
+                                new InlineKeyboardButton[] { 
+                                    new() { Text = BotMessages.MATCH_NEXT_TEXT, CallbackData = $"match_n_{teacherId}_{category.Id}" },
+                                    new() { Text = BotMessages.MATCH_SAVE_TEXT, CallbackData = $"match_s_{teacherId}_{category.Id}" }
+                                }
                             }),
                             parseMode: ParseMode.Html
                         );
