@@ -52,18 +52,24 @@ namespace KMATutorBot.Menu.Sections
 
                     if (category != null)
                     {
-                        var teachers = ctx.DB.GetTeachersByCategory(category.Id);
+                        var teachers = ctx.DB.GetTeachersByCategory(category.Id, ctx.User.Id);
                         var teacherId = teachers.Any() ? teachers.FirstOrDefault().Id : 0;
                         var replyText = BotMessages.FINDER_WE_FOUND_TEACHERS_TEXT(teachers);
+
+                        var replyMarkup = new InlineKeyboardMarkup(new InlineKeyboardButton[][] {
+                            new InlineKeyboardButton[] {
+                                new() { Text = BotMessages.MATCH_NEXT_TEXT, CallbackData = $"match_n_{teacherId}_{category.Id}" },
+                                new() { Text = BotMessages.MATCH_SAVE_TEXT, CallbackData = $"match_s_{teacherId}_{category.Id}" }
+                            }
+                        });
+                        var emptyReplyMarkup = new InlineKeyboardMarkup(new InlineKeyboardButton[][] {
+                            new InlineKeyboardButton[] { }
+                        });
+
                         await ctx.TelegramCLient.SendTextMessageAsync(
                             chatId: ctx.MessageEvent.Message.Chat,
                             text: replyText,
-                            replyMarkup: new InlineKeyboardMarkup(new InlineKeyboardButton[][] {
-                                new InlineKeyboardButton[] { 
-                                    new() { Text = BotMessages.MATCH_NEXT_TEXT, CallbackData = $"match_n_{teacherId}_{category.Id}" },
-                                    new() { Text = BotMessages.MATCH_SAVE_TEXT, CallbackData = $"match_s_{teacherId}_{category.Id}" }
-                                }
-                            }),
+                            replyMarkup: teachers.Any() ? replyMarkup : emptyReplyMarkup,
                             parseMode: ParseMode.Html
                         );
                     }

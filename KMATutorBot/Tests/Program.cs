@@ -18,6 +18,8 @@ namespace Tests
                 .Aggregate((accumulator, element) => accumulator.Concat(element));
 
             Console.WriteLine(string.Join(", ", buttons1Dimensional));
+
+            new DatabaseTests().Test1();
         }
     }
 }

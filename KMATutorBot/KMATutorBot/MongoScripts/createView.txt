@@ -1,0 +1,17 @@
+﻿db.createCollection(
+  "UsersWithMatch",
+  {
+    "viewOn" : "BotUsers",
+    "pipeline" : [{
+		"$lookup": {
+                "from": "Matches",
+                "localField": "_id",
+                "foreignField": "teacher",
+                "as": "matches"
+            }
+	}],
+    "collation" : { 
+		"locale": "simple"
+	}
+  }
+)
