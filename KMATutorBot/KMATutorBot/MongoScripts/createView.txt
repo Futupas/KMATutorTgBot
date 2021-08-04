@@ -1,5 +1,5 @@
 ﻿db.createCollection(
-  "UsersWithMatch",
+  "MatchedTeachers",
   {
     "viewOn" : "BotUsers",
     "pipeline" : [{

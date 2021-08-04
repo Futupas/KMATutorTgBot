@@ -61,18 +61,13 @@ namespace KMATutorBot.MessageTexts
         public const string FINDER_FIND_TEACHERS_MENU_TEXT = @"Find teachers";
         public const string FINDER_FIND_TEACHERS_SELECT_CATEGORY_TEXT = @"Select ur category";
         public const string FINDER_NO_TEACHERS_TEXT = @"We couldn't find any teachers in this category";
-        public static string FINDER_WE_FOUND_TEACHERS_TEXT(IEnumerable<Models.BotUser> teachers)
+        public static string FINDER_WE_FOUND_TEACHER_TEXT(Models.BotUser teacher)
         {
-            if (teachers == null || !teachers.Any()) return FINDER_NO_TEACHERS_TEXT;
-            //todo add link to profile
-            var body = teachers
-                .Select(tch =>
-                {
-                    var bodyNamePart = $"<a href=\"tg://user?id={tch.Id}\">{tch.DisplayName ?? "Unnamed teacher"}</a>";
-                    var bodyDescriptionPart = tch.Description == null ? "" : $"\n{tch.Description}";
-                    return bodyNamePart + bodyDescriptionPart;
-                });
-            return $"Ookey, for u we found these students (limit 10):\n\n" + string.Join("\n\n", body);
+            if (teacher == null) return FINDER_NO_TEACHERS_TEXT;
+            var bodyNamePart = $"<a href=\"tg://user?id={teacher.Id}\">{teacher.DisplayName ?? "Unnamed teacher"}</a>";
+            var bodyDescriptionPart = teacher.Description == null ? "" : $"\n{teacher.Description}";
+            var body = bodyNamePart + bodyDescriptionPart;
+            return $"Ookey, for u we found a teacher 4 u:\n\n" + body;
         }
 
         public const string ADMIN_PANEL_MENU_TEXT = @"Admin panel";

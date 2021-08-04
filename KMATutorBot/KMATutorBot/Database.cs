@@ -19,6 +19,7 @@ namespace KMATutorBot
         #region Collections
         private IMongoCollection<Models.BotUser> BotUsers;
         private IMongoCollection<Models.MatchResult> Matches;
+        private IMongoCollection<Models.MatchedTeacher> MatchedTeachers;
         #endregion
 
         public Database()
@@ -28,6 +29,7 @@ namespace KMATutorBot
 
             BotUsers = DB.GetCollection<Models.BotUser>("BotUsers");
             Matches = DB.GetCollection<Models.MatchResult>("Matches");
+            MatchedTeachers = DB.GetCollection<Models.MatchedTeacher>("MatchedTeachers");
         }
 
         #region DAL
@@ -91,24 +93,34 @@ namespace KMATutorBot
             return user;
         }
 
-        public IEnumerable<Models.BotUser> GetTeachersByCategory(int category, long studentId, int? limit = 10)
+        public Models.BotUser GetMatchedTeacherByCategory(int category, long studentId)
         {
             //var teachers = BotUsers
             //    .Find(user => user.TeacherCategories != null && user.TeacherCategories.Contains(category))
             //    .Limit(limit)
             //    .ToEnumerable();
 
-            var teachers = BotUsers
-                .Find(user => 
-                    user.TeacherCategories != null && 
-                    user.TeacherCategories.Contains(category) && 
-                    user.LicenseExpired != null && 
-                    user.LicenseExpired > DateTime.Now)
-                .SortByDescending(user => user.Priority)
-                .Limit(limit)
-                .ToEnumerable();
+            //var teachers = BotUsers
+            //    .Find(user => 
+            //        user.TeacherCategories != null && 
+            //        user.TeacherCategories.Contains(category) && 
+            //        user.LicenseExpired != null && 
+            //        user.LicenseExpired > DateTime.Now)
+            //    .SortByDescending(user => user.Priority)
+            //    .Limit(limit)
+            //    .ToEnumerable();
 
-            return teachers;
+            var matchedTeacher = MatchedTeachers
+                .Find(mt =>
+                    mt.Id != studentId &&
+                    mt.TeacherCategories != null &&
+                    mt.TeacherCategories.Contains(category) &&
+                    mt.LicenseExpired != null &&
+                    mt.LicenseExpired > DateTime.Now &&
+                    !mt.Matches.Any(m => m.Student == studentId))
+                .FirstOrDefault();
+
+            return matchedTeacher;
         }
         /// <param name="categories">Can be null</param>
         public Models.BotUser GetUserByTelegramNickname(string nickname)

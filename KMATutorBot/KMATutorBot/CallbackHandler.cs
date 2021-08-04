@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KMATutorBot.MessageTexts;
+using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace KMATutorBot
@@ -51,6 +52,28 @@ namespace KMATutorBot
                     context.CallbackEvent.CallbackQuery.Message.MessageId,
                     new InlineKeyboardMarkup(Enumerable.Empty<IEnumerable<InlineKeyboardButton>>())
                  );
+
+
+                var teacher = context.DB.GetMatchedTeacherByCategory(categoryId, context.User.Id);
+                var newTeacherId = teacher == null ? 0 : teacher.Id;
+                var replyText = BotMessages.FINDER_WE_FOUND_TEACHER_TEXT(teacher);
+
+                var replyMarkup = new InlineKeyboardMarkup(new InlineKeyboardButton[][] {
+                            new InlineKeyboardButton[] {
+                                new() { Text = BotMessages.MATCH_NEXT_TEXT, CallbackData = $"match_n_{newTeacherId}_{categoryId}" },
+                                new() { Text = BotMessages.MATCH_SAVE_TEXT, CallbackData = $"match_s_{newTeacherId}_{categoryId}" }
+                            }
+                        });
+                var emptyReplyMarkup = new InlineKeyboardMarkup(new InlineKeyboardButton[][] {
+                            new InlineKeyboardButton[] { }
+                        });
+
+                await context.TelegramCLient.SendTextMessageAsync(
+                    chatId: context.CallbackEvent.CallbackQuery.Message.Chat.Id,
+                    text: replyText,
+                    replyMarkup: teacher is not null ? replyMarkup : emptyReplyMarkup,
+                    parseMode: ParseMode.Html
+                );
 
             }
             catch(Exception ex)

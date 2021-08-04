@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 namespace KMATutorBot.Models
 {
+    [BsonIgnoreExtraElements]
     public class BotUser
     {
         [BsonId]
